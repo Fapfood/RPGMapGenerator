@@ -1,6 +1,8 @@
 object Appl {
   def main(agrs: Array[String]) {
-    val mg = new MapGenerator(1,1)
-    println(Shape.randomShape())
+    val mf = new MapField
+    println(mf)
+    println(mf+Type.Wall)
+    println(mf)
   }
 }
