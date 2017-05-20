@@ -8,7 +8,7 @@ object Abstract2DTileType extends Enumeration{
   Door,
   Tree,
   DoubleTree,
-  Road,
-  EntryPoint
+  Path,
+  Signpost
   = Value
 }
