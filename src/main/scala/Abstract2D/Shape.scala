@@ -1,3 +1,5 @@
+package Abstract2D
+
 import scala.util.Random
 
 object Shape extends Enumeration {
