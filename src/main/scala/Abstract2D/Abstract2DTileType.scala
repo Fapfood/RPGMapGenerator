@@ -1,6 +1,6 @@
 package Abstract2D
 
 object Abstract2DTileType extends Enumeration{
-  type Type = Value
-  val Ground, Building, Door, Tree, Road, EntryPoint = Value
+  type Abstract2DTileType = Value
+  val Ground, Building, Door, Tree, DoubleTree, Road, EntryPoint = Value
 }
