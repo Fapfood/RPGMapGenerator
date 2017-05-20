@@ -1,3 +1,6 @@
-class MapGenerator(val width: Int, val height: Int) {
-
+class MapGenerator(val MapParams : MapParameters) {
+  def generateMap(): Array[Array[MapField]] = {
+    var map = Array.ofDim[MapField](MapParams.width, MapParams.height)
+    map
+  }
 }
