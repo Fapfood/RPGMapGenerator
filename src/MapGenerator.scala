@@ -1,6 +1,3 @@
-/**
-  * Created by FAPFOOD on 2017-05-20.
-  */
-class MapGenerator {
+class MapGenerator(val width: Int, val height: Int) {
 
 }

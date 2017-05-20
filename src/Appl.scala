@@ -1,8 +1,6 @@
-/**
-  * Created by FAPFOOD on 2017-05-20.
-  */
 object Appl {
   def main(agrs: Array[String]) {
+    val mg = new MapGenerator(1,1)
     println("Kuwa")
   }
 }
