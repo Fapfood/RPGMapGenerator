@@ -1,3 +1,3 @@
-class MapGenerator(val width: Int, val height: Int) {
+class MapGenerator(val MapParames : MapParameters) {
 
 }
