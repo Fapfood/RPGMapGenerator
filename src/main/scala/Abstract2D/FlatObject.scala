@@ -3,13 +3,17 @@ package Abstract2D
 import scala.util.Random
 
 trait FlatObject {
-  def build(previousPoints: List[Point], area: Int): List[Point] = {
+  def buildBase(previousPoints: List[Point], area: Int, weights: List[Int] = List(1, 1)): List[Point] = {
     if (previousPoints.length > area)
       throw new Exception("Too little area in FlatObject.build")
 
+    val impElemsToWeight = collection.mutable.Map.empty[Int, Int]
+    for (i <- weights.indices)
+      impElemsToWeight.put(i, weights(i))
+
     var shape = previousPoints
     for (_ <- previousPoints.length + 1 to area) {
-      val nearestPoints = this.nearestPoints(shape, Map(0 -> 1, 1 -> 1))
+      val nearestPoints = this.nearestPoints(shape, impElemsToWeight.toMap)
       val previousPoint = nearestPoints(Random.nextInt(nearestPoints.length))
       shape = previousPoint :: shape
     }
