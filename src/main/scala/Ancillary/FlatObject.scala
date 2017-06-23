@@ -1,8 +1,10 @@
 package Ancillary
 
+import Abstract2D.Perimeter
+
 import scala.util.Random
 
-trait FlatObject {
+trait FlatObject extends Perimeter {
   def buildBase(previousPoints: List[Point], area: Int, weights: List[Int] = List(1, 1)): List[Point] = {
     if (previousPoints.length > area)
       throw new Exception("Too little area in FlatObject.build")
@@ -26,19 +28,18 @@ trait FlatObject {
       throw new Exception("Wrong weight map in nearest points method")
 
     val pointToDistance = collection.mutable.Map.empty[Point, Int]
-    for (p <- previousPoints)
-      for (consideredPoint <- List(p - Point(1, 0), p + Point(1, 0), p - Point(0, 1), p + Point(0, 1)))
-        if (!previousPoints.contains(consideredPoint) && !pointToDistance.contains(consideredPoint)) {
-          var distance = consideredPoint.stepDistance(previousPoints.last) * impElemsToWeight(0) // to start point
-          var tailed = previousPoints
-          var i = 1
-          while (i <= importantElems && tailed.length > 1) {
-            distance += consideredPoint.stepDistance(tailed.head) * impElemsToWeight(i) // to last added points
-            tailed = tailed.tail
-            i += 1
-          }
-          pointToDistance.put(consideredPoint, distance)
+    for (consideredPoint <- getPerimeter(previousPoints))
+      if (!pointToDistance.contains(consideredPoint)) {
+        var distance = consideredPoint.stepDistance(previousPoints.last) * impElemsToWeight(0) // to start point
+        var tailed = previousPoints
+        var i = 1
+        while (i <= importantElems && tailed.length > 1) {
+          distance += consideredPoint.stepDistance(tailed.head) * impElemsToWeight(i) // to last added points
+          tailed = tailed.tail
+          i += 1
         }
+        pointToDistance.put(consideredPoint, distance)
+      }
     val minDistance = pointToDistance.values.min
     val nearestPoints = pointToDistance.retain((_, v) => v == minDistance).keys.toList
     nearestPoints

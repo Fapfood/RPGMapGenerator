@@ -1,24 +1,6 @@
 package Ancillary
 
-import Abstract2D.Map
-
 trait BetweenPointsObject {
-
-  def planPath(startPoint: Point, endPoint: Point, map: Map): List[Point] = {
-    if (map.isHardOccupied(startPoint) || map.isHardOccupied(endPoint))
-      throw new Exception("Wrong end points in BetweenPointsObject.planPath")
-
-    val idealPath = planIdealPath(startPoint, endPoint)
-    var currentPoint = idealPath.head
-    var tailedPath = idealPath.tail
-
-    while (currentPoint != endPoint) {
-      currentPoint = tailedPath.head
-      tailedPath = tailedPath.tail
-    }
-
-    List(Point())
-  }
 
   def planIdealPath(startPoint: Point, endPoint: Point, balance: Double = 0.5): List[Point] = {
     if (balance < 0 || balance > 1)
