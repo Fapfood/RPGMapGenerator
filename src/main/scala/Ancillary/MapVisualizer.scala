@@ -1,4 +1,4 @@
-package Abstract2D
+package Ancillary
 
 class MapVisualizer {
   def dump(board: collection.immutable.Map[Point, String]): String = {

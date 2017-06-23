@@ -1,4 +1,4 @@
-package Abstract2D
+package Ancillary
 
 class Point private(val x: Int, val y: Int) {
   def +(other: Point) = Point(x + other.x, y + other.y)
