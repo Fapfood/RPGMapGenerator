@@ -2,15 +2,41 @@ package Abstract2D
 
 import Ancillary.Point
 
-class Map(val x: Int, val y: Int) {
-  val list: List[MapObject] = List()
+class Map(val x: Int, val y: Int) extends Perimeter {
+  val elems: collection.mutable.ListBuffer[MapObject] = collection.mutable.ListBuffer.empty[MapObject]
+
+  def addElement(elem: MapObject): Unit = elems += elem
+
+  def getElements: List[MapObject] = elems.toList
 
   def isHardOccupied(point: Point): Boolean = {
-    for (o <- list)
+    for (o <- elems)
       if (o.getLevelOfOccupancy(point) > 0)
         return true
 
     false
   }
 
+  def getGroupOfHardPointsConnectedWith(point: Point): List[Point] = {
+    if (!isHardOccupied(point))
+      throw new Exception("Wrong point list in getGroupOfHardPointsConnectedWith")
+
+    @scala.annotation.tailrec
+    def group(points: List[Point]): List[Point] = {
+
+      val buff = points.to[collection.mutable.ListBuffer]
+
+      for (p <- getPerimeter(points)) {
+        if (isHardOccupied(p))
+          buff += p
+      }
+
+      if (buff.length == points.length)
+        return points
+
+      group(buff.toList)
+    }
+
+    group(List(point))
+  }
 }
