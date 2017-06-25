@@ -1,13 +1,14 @@
 import GUI.Controller
 
 import scala.swing._
+import scala.swing.event.KeyTyped
 
 object MainWindow extends SimpleSwingApplication {
-  val WidthTextField: TextField = new TextField(columns = 10)
-  val HeightTextField: TextField = new TextField(columns = 10)
-  val TreesTextField: TextField = new TextField(columns = 10)
-  val HousesTextField: TextField = new TextField(columns = 10)
-  val ExitsTextField: TextField = new TextField(columns = 10)
+  val WidthTextField: TextField = getFilteredTextField
+  val HeightTextField: TextField = getFilteredTextField
+  val TreesTextField: TextField = getFilteredTextField
+  val HousesTextField: TextField = getFilteredTextField
+  val ExitsTextField: TextField = getFilteredTextField
   def top = new MainFrame {
     title = "First Swing App"
     menuBar = new MenuBar {
@@ -57,6 +58,15 @@ object MainWindow extends SimpleSwingApplication {
         contents += ExitsTextField
       }
 
+    }
+  }
+
+  private[this] def getFilteredTextField: TextField = {
+    new TextField (columns = 10){
+      listenTo(keys)
+      reactions += { case e: KeyTyped =>
+        if (!e.char.isDigit) e.consume
+      }
     }
   }
 
