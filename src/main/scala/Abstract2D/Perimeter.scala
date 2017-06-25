@@ -15,4 +15,16 @@ trait Perimeter {
 
     buff.toSet.toList
   }
+
+  protected def getSignificantPointsOfPerimeter(perimeter: List[Point]): List[Point] = {
+    val buff = perimeter.to[collection.mutable.ListBuffer]
+
+    for (p <- perimeter) {
+      if (perimeter.contains(p + Point(1, 0)) && perimeter.contains(p - Point(1, 0)))
+        buff -= p
+      if (perimeter.contains(p + Point(0, 1)) && perimeter.contains(p - Point(0, 1)))
+        buff -= p
+    }
+    buff.toList
+  }
 }
