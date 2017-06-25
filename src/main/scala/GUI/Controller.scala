@@ -1,5 +1,7 @@
 package GUI
 
+import Abstract2D.MapParameters
+
 import scala.swing.TextField
 
 object Controller {
@@ -22,9 +24,27 @@ object Controller {
 
   def generate(): Unit = {
     println("Generating image")
+    val params = new MapParameters(width, height, treesNumber, housesNumber, exitsNumber)
+    //todo: call method which will return image, then print the image.
   }
 
   def save(): Unit = {
     println("Saving file")
+  }
+
+  def width : Int = {
+    MainWindow.WidthTextField.text.toInt
+  }
+  def height : Int = {
+    MainWindow.HeightTextField.text.toInt
+  }
+  def treesNumber : Int = {
+    MainWindow.TreesTextField.text.toInt
+  }
+  def housesNumber : Int = {
+    MainWindow.HousesTextField.text.toInt
+  }
+  def exitsNumber : Int = {
+    MainWindow.ExitsTextField.text.toInt
   }
 }
