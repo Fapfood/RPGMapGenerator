@@ -1,15 +1,16 @@
 package GUI
 object Controller {
-  def randomize: Unit = {
+
+  def randomize(): Unit = {
     println("Randomizing")
-    //MainWindow.HousesTextField.text = "321"
+    MainWindow.HousesTextField.text = "321"
   }
 
-  def generate: Unit = {
+  def generate(): Unit = {
     println("Generating image")
   }
 
-  def save: Unit = {
+  def save(): Unit = {
     println("Saving file")
   }
 }

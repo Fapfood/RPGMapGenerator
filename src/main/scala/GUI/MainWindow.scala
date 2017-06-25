@@ -1,4 +1,4 @@
-import GUI.Controller
+package GUI
 
 import scala.swing._
 import scala.swing.event.KeyTyped
@@ -14,13 +14,13 @@ object MainWindow extends SimpleSwingApplication {
     menuBar = new MenuBar {
       contents += new Menu("Menu"){
         contents += new MenuItem(Action("Losuj dane"){
-          Controller.randomize
+          Controller.randomize()
         })
         contents += new MenuItem(Action("Generuj"){
-          Controller.generate
+          Controller.generate()
         })
         contents += new MenuItem(Action("Zapisz"){
-          Controller.save
+          Controller.save()
         })
       }
     }
