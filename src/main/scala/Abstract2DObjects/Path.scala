@@ -1,11 +1,12 @@
-package Abstract2D
+package Abstract2DObjects
 
-import Ancillary.{BetweenPointsObject, Point}
+import Abstract2DAncillary.{BetweenPointsObject, Perimeter, Point}
 
-class Path() extends MapObject with BetweenPointsObject with Perimeter {
-  override def getLevelOfOccupancy(point: Point): Int = 0
+class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject with BetweenPointsObject with Perimeter {
+  override val pointsList: List[Point] = planPath(startPoint, endPoint, map)
+  override val hardness: Int = 0
 
-  def planPath(startPoint: Point, endPoint: Point, map: Map): List[Point] = {
+  private def planPath(startPoint: Point, endPoint: Point, map: Map): List[Point] = {
     val graph = createGraphBetween(startPoint, endPoint, map)
     val path = shortestPathsOfDijkstra(graph, startPoint, endPoint)
     println(path)
