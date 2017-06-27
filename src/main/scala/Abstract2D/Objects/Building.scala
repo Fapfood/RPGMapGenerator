@@ -1,6 +1,7 @@
-package Abstract2DObjects
+package Abstract2D.Objects
 
-import Abstract2DAncillary.{BlockObject, Perimeter, Point, RectangularObject}
+import Abstract2D.Ancillary.{BlockObject, MapObject, RectangularObject}
+import Ancillary.{Perimeter, Point}
 
 import scala.util.Random
 
