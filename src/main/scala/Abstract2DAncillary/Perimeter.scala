@@ -1,6 +1,4 @@
-package Abstract2D
-
-import Ancillary.Point
+package Abstract2DAncillary
 
 trait Perimeter {
   protected def getPerimeter(shape: List[Point]): List[Point] = {
