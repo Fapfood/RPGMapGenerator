@@ -1,4 +1,4 @@
-package Abstract2DAncillary
+package Abstract2D.Ancillary
 
 trait BlockObject {
   protected val heightOfStorey: Int
