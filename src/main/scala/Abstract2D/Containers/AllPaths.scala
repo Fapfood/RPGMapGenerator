@@ -5,7 +5,7 @@ import Abstract2D.Ancillary.MapObject
 import Abstract2D.Objects.Path
 import Ancillary.Point
 
-class StreetNetwork(map: Map) extends MapObject {
+class AllPaths(map: Map) extends MapObject {
   private val buff = collection.mutable.ListBuffer.empty[Point]
   override val pointsList: List[Point] = concatenatePaths()
   override val hardness: Int = 0
