@@ -1,7 +1,7 @@
 package Abstract2DAncillary
 
 trait Perimeter {
-  protected def getPerimeter(shape: List[Point]): List[Point] = {
+  def getPerimeter(shape: List[Point]): List[Point] = {
     val buff = collection.mutable.ListBuffer.empty[Point]
 
     for (p <- shape)
@@ -14,7 +14,7 @@ trait Perimeter {
     buff.toSet.toList
   }
 
-  protected def getSignificantPointsOfPerimeter(perimeter: List[Point]): List[Point] = {
+  def getSignificantPointsOfPerimeter(perimeter: List[Point]): List[Point] = {
     val buff = perimeter.to[collection.mutable.ListBuffer]
 
     for (p <- perimeter) {
