@@ -1,7 +1,7 @@
 package Randomization
 
-import Abstract2DAncillary.Point
 import Abstract3D.{PieceOfMap, PieceOfPath, PieceOfSign, PieceOfTree}
+import Ancillary.Point
 import OutsideTiles.DirectTiles.{BroadTree, NarrowTree, Signpost}
 import Randomization.OutsideTiles.FoldingComplexTiles.Road
 import com.sksamuel.scrimage.Image
