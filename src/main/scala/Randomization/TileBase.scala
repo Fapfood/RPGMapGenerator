@@ -1,4 +1,4 @@
-package Generator
+package Randomization
 
 import java.io.File
 
