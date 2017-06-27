@@ -7,8 +7,8 @@ import Ancillary.Point
 
 class StreetNetwork(map: Map) extends MapObject {
   private val buff = collection.mutable.ListBuffer.empty[Point]
-  override protected val pointsList: List[Point] = concatenatePaths()
-  override protected val hardness: Int = 0
+  override val pointsList: List[Point] = concatenatePaths()
+  override val hardness: Int = 0
 
   private def concatenatePaths(): List[Point] = {
     val firstClassPoints = collection.mutable.ListBuffer.empty[Point]
