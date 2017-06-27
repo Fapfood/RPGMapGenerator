@@ -2,7 +2,7 @@ package Generator
 
 import java.io.File
 
-import Ancillary.Point
+import Abstract2DAncillary.Point
 import com.sksamuel.scrimage.{Image, Position}
 
 class Generator(x: Int, y: Int) {
