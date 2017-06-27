@@ -1,7 +1,8 @@
 package Abstract3D
 
 import Abstract2D.Map
-import Abstract2D.Containers.StreetNetwork
+import Abstract2D.Ancillary.MapObject
+import Abstract2D.Containers.{AllGrass, AllGround, AllPaths}
 import Abstract2D.Objects._
 import Ancillary.{Perimeter, Point}
 
@@ -19,17 +20,18 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
   private def generateLayer0(): Unit = {
     for (el <- map.getElements)
       el match {
-        case streetNetwork: StreetNetwork =>
-          for (point <- streetNetwork.pointsList) {
-            val pathMatrix = Array.fill(3, 3)(false)
-            pathMatrix(1)(1) = true
-            for (p <- getPerimeter(List(point)))
-              if (streetNetwork.pointsList.contains(p))
-                pathMatrix(1 - (point - p).x)(1 - (point - p).y) = true
-            buff += PieceOfPath(point, 0, pathMatrix)
-          }
-        case ground: Ground =>
-        case grass: Grass =>
+        case path: AllPaths =>
+          for (tuple <- getTypicalTuple(path))
+            buff += PieceOfPath(tuple._1, tuple._2, tuple._3)
+
+        case ground: AllGround =>
+          for (tuple <- getTypicalTuple(ground))
+            buff += PieceOfGround(tuple._1, tuple._2, tuple._3)
+
+        case grass: AllGrass =>
+          for (tuple <- getTypicalTuple(grass))
+            buff += PieceOfGrass(tuple._1, tuple._2, tuple._3)
+
         case _ =>
       }
   }
@@ -54,10 +56,8 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
           buff += PieceOfSign(signpost.pointsList.head, 1, Array.fill(1, 1)(true))
 
         case building: Building =>
-        case _ =>
 
-        //        case Door =>
-        //          map(i)(j)(layer) = Layer1_Wall
+        case _ =>
       }
   }
 
@@ -78,15 +78,30 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
           }
 
         case building: Building =>
-        case _ =>
 
-        //        case Door =>
-        //          map(i)(j)(layer) = Layer2_Door
-        //          map(i)(j + 1)(layer) = Layer2_Door
+        case _ =>
       }
   }
 
   private def generateLayer3(): Unit = {
-    for (el <- map.getElements) {}
+    for (el <- map.getElements)
+      el match {
+        case _ =>
+      }
+  }
+
+  private def getTypicalTuple(elem: MapObject): List[(Point, Int, Array[Array[Boolean]])] = {
+    val buff = collection.mutable.ListBuffer.empty[(Point, Int, Array[Array[Boolean]])]
+
+    for (point <- elem.pointsList) {
+      val matrix = Array.fill(3, 3)(false)
+      matrix(1)(1) = true
+
+      for (p <- getPerimeter(List(point)))
+        if (elem.pointsList.contains(p))
+          matrix(1 - (point - p).x)(1 - (point - p).y) = true
+      buff += Tuple3(point, 0, matrix)
+    }
+    buff.toList
   }
 }
