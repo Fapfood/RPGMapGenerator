@@ -1,7 +1,5 @@
 package GUI
 
-import Abstract2D.MapParameters
-
 import scala.swing.TextField
 
 object Controller {
