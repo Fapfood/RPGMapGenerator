@@ -1,6 +1,9 @@
-package Abstract2DObjects
+package Abstract2D.Containers
 
-import Abstract2DAncillary.Point
+import Abstract2D.Map
+import Abstract2D.Ancillary.MapObject
+import Abstract2D.Objects.Path
+import Ancillary.Point
 
 class StreetNetwork(map: Map) extends MapObject {
   private val buff = collection.mutable.ListBuffer.empty[Point]
@@ -21,15 +24,15 @@ class StreetNetwork(map: Map) extends MapObject {
       midpoint = findMidpoint(secondClassPoints.toList)
 
     if (firstClassPoints.nonEmpty) {
-      buff ++= new Path(firstClassPoints.head, midpoint, map).getFields
+      buff ++= new Path(firstClassPoints.head, midpoint, map).pointsList
       for (p <- firstClassPoints.tail)
-        buff ++= new Path(p, getClosestPointToPath(p), map).getFields
+        buff ++= new Path(p, getClosestPointToPath(p), map).pointsList
       for (p <- secondClassPoints)
-        buff ++= new Path(p, getClosestPointToPath(p), map).getFields
+        buff ++= new Path(p, getClosestPointToPath(p), map).pointsList
     } else {
-      buff ++= new Path(secondClassPoints.head, midpoint, map).getFields
+      buff ++= new Path(secondClassPoints.head, midpoint, map).pointsList
       for (p <- secondClassPoints.tail)
-        buff ++= new Path(p, getClosestPointToPath(p), map).getFields
+        buff ++= new Path(p, getClosestPointToPath(p), map).pointsList
     }
 
     buff.toSet.toList
@@ -39,8 +42,8 @@ class StreetNetwork(map: Map) extends MapObject {
     val buff = collection.mutable.ListBuffer.empty[Point]
 
     for (e <- map.getElements)
-      if (e.getEntryPoint.isDefined)
-        buff += e.getEntryPoint.get
+      if (e.entryPoint.isDefined)
+        buff += e.entryPoint.get
 
     buff.toList
   }
