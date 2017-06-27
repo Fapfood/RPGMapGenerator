@@ -1,8 +1,10 @@
-package Abstract2DObjects
+package Abstract2D.Objects
 
-import Abstract2DAncillary.{BetweenPointsObject, Perimeter, Point}
+import Abstract2D.Map
+import Abstract2D.Ancillary.{BetweenPointsObject, MapObject}
+import Ancillary.{Perimeter, Point}
 
-class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject with BetweenPointsObject with Perimeter {
+class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject {
   override val pointsList: List[Point] = planPath(startPoint, endPoint, map)
   override val hardness: Int = 0
 
@@ -12,12 +14,12 @@ class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject with 
 
     val result = collection.mutable.ListBuffer.empty[Point]
     for (i <- 0 to path.length - 2)
-      result ++= planIdealPath(path(i), path(i + 1))
+      result ++= new BetweenPointsObject {}.planIdealPath(path(i), path(i + 1))
     result.toList
   }
 
   private def isSomethingOnTheRoad(startPoint: Point, endPoint: Point, map: Map): Option[Point] = {
-    val idealPath = planIdealPath(startPoint, endPoint)
+    val idealPath = new BetweenPointsObject {}.planIdealPath(startPoint, endPoint)
     var currentPoint = idealPath.head
     var tailedPath = idealPath.tail
 
@@ -47,7 +49,7 @@ class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject with 
         case None =>
         case Some(point) =>
           val obstacle = map.getGroupOfHardPointsConnectedWith(point)
-          val putativePoints = getSignificantPointsOfPerimeter(getPerimeter(obstacle))
+          val putativePoints = new Perimeter {}.getSignificantPointsOfPerimeter(new Perimeter {}.getPerimeter(obstacle))
           for (p <- putativePoints)
             subVertices(p, endPoint)
       }
