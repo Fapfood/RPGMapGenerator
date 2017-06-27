@@ -9,7 +9,6 @@ class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject with 
   private def planPath(startPoint: Point, endPoint: Point, map: Map): List[Point] = {
     val graph = createGraphBetween(startPoint, endPoint, map)
     val path = shortestPathsOfDijkstra(graph, startPoint, endPoint)
-    println(path)
 
     val result = collection.mutable.ListBuffer.empty[Point]
     for (i <- 0 to path.length - 2)
