@@ -5,6 +5,7 @@ import Abstract2DAncillary.Point
 trait MapObject {
   protected val pointsList: List[Point]
   protected val hardness: Int
+  protected val entryPoint: Option[Point] = None
 
   def getLevelOfOccupancy(point: Point): Int = {
     if (pointsList.contains(point)) hardness
@@ -12,4 +13,6 @@ trait MapObject {
   }
 
   def getFields: List[Point] = pointsList
+
+  def getEntryPoint: Option[Point] = entryPoint
 }
