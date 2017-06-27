@@ -2,7 +2,7 @@ package Abstract2DAncillary
 
 import scala.util.Random
 
-trait FlatObject extends Perimeter {
+trait FlatObject {
   def buildBase(previousPoints: List[Point], area: Int, weights: List[Int] = List(1, 1)): List[Point] = {
     if (previousPoints.length > area)
       throw new Exception("Too little area in FlatObject.build")
@@ -26,7 +26,7 @@ trait FlatObject extends Perimeter {
       throw new Exception("Wrong weight map in nearest points method")
 
     val pointToDistance = collection.mutable.Map.empty[Point, Int]
-    for (consideredPoint <- getPerimeter(previousPoints))
+    for (consideredPoint <- new Perimeter {}.getPerimeter(previousPoints))
       if (!pointToDistance.contains(consideredPoint)) {
         var distance = consideredPoint.stepDistance(previousPoints.last) * impElemsToWeight(0) // to start point
         var tailed = previousPoints
