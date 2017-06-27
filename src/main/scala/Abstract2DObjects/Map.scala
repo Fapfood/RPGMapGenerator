@@ -3,7 +3,7 @@ package Abstract2DObjects
 import Abstract2DAncillary.{Perimeter, Point}
 
 class Map(val x: Int, val y: Int) extends Perimeter {
-  val elems: collection.mutable.ListBuffer[MapObject] = collection.mutable.ListBuffer.empty[MapObject]
+  private val elems = collection.mutable.ListBuffer.empty[MapObject]
 
   def addElement(elem: MapObject): Unit = elems += elem
 
