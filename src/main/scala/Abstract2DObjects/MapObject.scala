@@ -1,6 +1,8 @@
-package Ancillary
+package Abstract2DObjects
 
-trait DetachedObject {
+import Abstract2DAncillary.Point
+
+trait MapObject {
   val pointsList: List[Point]
   val hardness: Int
 
