@@ -1,6 +1,6 @@
-package Abstract2D
+package Abstract2DObjects
 
-import Ancillary.Point
+import Abstract2DAncillary.{Perimeter, Point}
 
 class Map(val x: Int, val y: Int) extends Perimeter {
   val elems: collection.mutable.ListBuffer[MapObject] = collection.mutable.ListBuffer.empty[MapObject]
