@@ -1,4 +1,4 @@
-package Generator.DirectTiles
+package Tiles.DirectTiles
 
 import Generator.DirectTile
 

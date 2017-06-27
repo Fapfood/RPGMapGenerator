@@ -1,4 +1,4 @@
-package Generator.FoldingComplexTiles
+package Tiles.FoldingComplexTiles
 
 import Generator.FoldingComplexTile
 

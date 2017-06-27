@@ -1,4 +1,4 @@
-package Generator.FoldingStraightTiles
+package Tiles.FoldingStraightTiles
 
 import Generator.FoldingStraightTile
 
