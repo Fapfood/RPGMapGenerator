@@ -11,3 +11,5 @@
 out
 gen
 /src/main/scala/Appl.scala
+/target/
+/project/target/
