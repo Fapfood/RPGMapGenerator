@@ -2,10 +2,10 @@ package Generator
 
 import java.io.File
 
-import Abstract2DAncillary.Point
+import Ancillary.Point
 import com.sksamuel.scrimage.{Image, Position}
 
-class Generator(x: Int, y: Int) {
+class MapGenerator(x: Int, y: Int) {
   private val TILE_SIDE = 32
   var image: Image = makeImage(x, y)
 
