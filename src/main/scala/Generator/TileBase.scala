@@ -8,17 +8,21 @@ sealed abstract class TileBase(tilesetName: String) {
   protected val TILE_SIDE = 32
   protected val empty: Image = Image.fromFile(new File("resources\\Empty.png"))
   protected val image: Image = Image.fromFile(new File("resources\\tilesets\\" + tilesetName))
+
+  def getTileFor(map3x3: Array[Array[Boolean]]): Image = empty
 }
 
 case class DirectTile(tilesetName: String, x_start: Int, x_end: Int, y_start: Int, y_end: Int)
   extends TileBase(tilesetName) {
 
-  def getTileFor(x: Int, y: Int): Image =
-    if (x >= 0 && y >= 0 && x <= x_end - x_start && y <= y_end - y_start)
-      image.translate(-TILE_SIDE * (x_start + x), -TILE_SIDE * (y_start + y))
-        .resizeTo(TILE_SIDE, TILE_SIDE, Position.TopLeft)
-    else
-      empty
+  override def getTileFor(mapNxM: Array[Array[Boolean]]): Image = {
+    for (x <- mapNxM.indices)
+      for (y <- mapNxM(0).indices)
+        if (mapNxM(x)(y))
+          return image.translate(-TILE_SIDE * (x_start + x), -TILE_SIDE * (y_start + y))
+            .resizeTo(TILE_SIDE, TILE_SIDE, Position.TopLeft)
+    empty
+  }
 }
 
 class FoldingStraightTile(override val tilesetName: String, override val x_start: Int, override val y_start: Int)
@@ -89,7 +93,7 @@ case class FoldingComplexTile(tilesetName: String, x_start: Int, y_start: Int)
       .resizeTo(TILE_SIDE, TILE_SIDE, position)
   }
 
-  def getTileFor(map3x3: Array[Array[Boolean]]): Image = {
+  override def getTileFor(map3x3: Array[Array[Boolean]]): Image = {
     var img = empty
     if (!map3x3(1)(1)) return img
 
