@@ -40,9 +40,10 @@ object MainWindow extends SimpleSwingApplication {
   }
 
   private[this] def getLabelAndTextField(label: String, textField: TextField): Panel = {
-    new FlowPanel(){
-      contents += new Label(label)
-      contents += textField
+    import BorderPanel.Position._
+    new BorderPanel() {
+      layout += new Label(label) -> West
+      layout += textField -> East
     }
   }
 
