@@ -62,12 +62,14 @@ object MainWindow extends SimpleSwingApplication {
   }
 
   private[this] def getFilteredTextField: TextField = {
-    new TextField (columns = 10){
+    var tField : TextField = new TextField (columns = 10){
       listenTo(keys)
       reactions += { case e: KeyTyped =>
         if (!e.char.isDigit) e.consume
       }
     }
+    tField.text = "0"
+    tField
   }
 
 }
