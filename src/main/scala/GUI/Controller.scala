@@ -11,6 +11,8 @@ import Generator.MapGenerator
 import java.io._
 import javax.swing.ImageIcon
 
+import scala.swing.{Dialog, FileChooser}
+
 object Controller {
   val r = scala.util.Random
   val WidthRange : Range = Range(300,600)
@@ -38,11 +40,19 @@ object Controller {
     image.output(out)
 
     val img = new ImageIcon("tmp.png")
-    scala.swing.Dialog.showConfirmation(message = null, icon = img, title = "Do you want to save this image?")
+    val res = Dialog.showConfirmation(message = null, icon = img, title = "Do you want to save this image?")
+    if (res == Dialog.Result.Ok){
+      save(image)
+    }
   }
 
-  def save(): Unit = {
-    println("Saving file")
+  def save(image : Image): Unit = {
+    val chooser = new FileChooser(null)
+    //chooser.fileSelectionMode = FileChooser.SelectionMode.DirectoriesOnly
+    val result = chooser.showSaveDialog(null)
+    if(result == FileChooser.Result.Approve){
+      image.output(chooser.selectedFile)
+    }
   }
 
   def width : Int = {
