@@ -19,9 +19,6 @@ object MainWindow extends SimpleSwingApplication {
         contents += new MenuItem(Action("Generuj"){
           Controller.generate()
         })
-        contents += new MenuItem(Action("Zapisz"){
-          Controller.save()
-        })
       }
     }
 
