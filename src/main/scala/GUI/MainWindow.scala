@@ -30,31 +30,19 @@ object MainWindow extends SimpleSwingApplication {
 
   private[this] def getTextFieldsPanel: BoxPanel = {
     new BoxPanel(Orientation.Vertical){
-      contents += new FlowPanel(){
-        contents += new Label("Map Width: ")
-        contents += WidthTextField
-      }
 
-      contents += new FlowPanel(){
-        contents += new Label("Map Height: ")
-        contents += HeightTextField
-      }
+      contents += getLabelAndTextField("Map Width: ", WidthTextField)
+      contents += getLabelAndTextField("Map Height: ", HeightTextField)
+      contents += getLabelAndTextField("Trees Number: ", TreesTextField)
+      contents += getLabelAndTextField("Houses number: ", HousesTextField)
+      contents += getLabelAndTextField("Exits number: ", ExitsTextField)
+    }
+  }
 
-      contents += new FlowPanel(){
-        contents += new Label("Trees Number: ")
-        contents += TreesTextField
-      }
-
-      contents += new FlowPanel(){
-        contents += new Label("Houses number: ")
-        contents += HousesTextField
-      }
-
-      contents += new FlowPanel(){
-        contents += new Label("Exits number: ")
-        contents += ExitsTextField
-      }
-
+  private[this] def getLabelAndTextField(label: String, textField: TextField): Panel = {
+    new FlowPanel(){
+      contents += new Label(label)
+      contents += textField
     }
   }
 
