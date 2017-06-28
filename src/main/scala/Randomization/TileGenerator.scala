@@ -1,9 +1,10 @@
 package Randomization
 
-import Abstract3D.{PieceOfMap, PieceOfPath, PieceOfSign, PieceOfTree}
+import Abstract3D._
 import Ancillary.Point
-import OutsideTiles.DirectTiles.{BroadTree, NarrowTree, Signpost}
-import Randomization.OutsideTiles.FoldingComplexTiles.Road
+import OutsideTiles.DirectTiles._
+import OutsideTiles.FoldingComplexTiles._
+import OutsideTiles.FoldingStraightTiles._
 import com.sksamuel.scrimage.Image
 
 class TileGenerator(piecesOfMap: List[PieceOfMap]) {
@@ -24,6 +25,21 @@ class TileGenerator(piecesOfMap: List[PieceOfMap]) {
 
         case sign: PieceOfSign =>
           buff += Tuple3(sign.point, sign.layer, Signpost.getTileFor(sign.mapNxM))
+
+        case grass: PieceOfGrass =>
+          buff += Tuple3(grass.point, grass.layer, Grass.getTileFor(grass.mapNxM))
+
+        case ground: PieceOfGround =>
+          buff += Tuple3(ground.point, ground.layer, Ground.getTileFor(ground.mapNxM))
+
+        case wall: PieceOfWall =>
+          buff += Tuple3(wall.point, wall.layer, NarrowBoardsWall.getTileFor(wall.mapNxM))
+
+        case roof: PieceOfRoof =>
+          buff += Tuple3(roof.point, roof.layer, StrawRoof.getTileFor(roof.mapNxM))
+
+        case door: PieceOfDoor =>
+          buff += Tuple3(door.point, door.layer, Door.getTileFor(door.mapNxM))
 
         case _ =>
       }

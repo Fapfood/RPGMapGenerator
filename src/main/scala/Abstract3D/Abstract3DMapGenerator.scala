@@ -21,16 +21,16 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
     for (el <- map.getElements)
       el match {
         case path: AllPaths =>
-          for (tuple <- getTypicalTuple(path))
-            buff += PieceOfPath(tuple._1, tuple._2, tuple._3)
+          for (tuple <- getTypicalTuples(path.pointsList))
+            buff += PieceOfPath(tuple._1, 0, tuple._2)
 
         case ground: AllGround =>
-          for (tuple <- getTypicalTuple(ground))
-            buff += PieceOfGround(tuple._1, tuple._2, tuple._3)
+          for (tuple <- getTypicalTuples(ground.pointsList))
+            buff += PieceOfGround(tuple._1, 0, tuple._2)
 
         case grass: AllGrass =>
-          for (tuple <- getTypicalTuple(grass))
-            buff += PieceOfGrass(tuple._1, tuple._2, tuple._3)
+          for (tuple <- getTypicalTuples(grass.pointsList))
+            buff += PieceOfGrass(tuple._1, 0, tuple._2)
 
         case _ =>
       }
@@ -56,6 +56,15 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
           buff += PieceOfSign(signpost.pointsList.head, 1, Array.fill(1, 1)(true))
 
         case building: Building =>
+          val points = collection.mutable.ListBuffer.empty[Point]
+
+          for (x <- building.leftTopCorner.x to building.rightBottomCorner.x)
+            for (y <- building.rightBottomCorner.y - building.heightOfStorey * building.numberOfStoreys + 1
+              to building.rightBottomCorner.y)
+              points += Point(x, y)
+
+          for (tuple <- getTypicalTuples(points.toList))
+            buff += PieceOfWall(tuple._1, 1, tuple._2)
 
         case _ =>
       }
@@ -78,6 +87,18 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
           }
 
         case building: Building =>
+          for (tuple <- getTypicalTuples(building.pointsList))
+            buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 2, tuple._2)
+
+          // door
+          if (building.rightBottomCorner.y + 1 == building.entryPoint.get.y) {
+            val doorBottomMatrix = Array.fill(1, 2)(false)
+            doorBottomMatrix(0)(1) = true
+            val doorTopMatrix = Array.fill(1, 2)(false)
+            doorTopMatrix(0)(0) = true
+            buff += PieceOfDoor(building.entryPoint.get - Point(0, 1), 2, doorBottomMatrix)
+            buff += PieceOfDoor(building.entryPoint.get - Point(0, 2), 2, doorTopMatrix)
+          }
 
         case _ =>
       }
@@ -90,17 +111,17 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
       }
   }
 
-  private def getTypicalTuple(elem: MapObject): List[(Point, Int, Array[Array[Boolean]])] = {
-    val buff = collection.mutable.ListBuffer.empty[(Point, Int, Array[Array[Boolean]])]
+  private def getTypicalTuples(points: List[Point]): List[(Point, Array[Array[Boolean]])] = {
+    val buff = collection.mutable.ListBuffer.empty[(Point, Array[Array[Boolean]])]
 
-    for (point <- elem.pointsList) {
+    for (point <- points) {
       val matrix = Array.fill(3, 3)(false)
       matrix(1)(1) = true
 
       for (p <- getPerimeter(List(point)))
-        if (elem.pointsList.contains(p))
+        if (points.contains(p))
           matrix(1 - (point - p).x)(1 - (point - p).y) = true
-      buff += Tuple3(point, 0, matrix)
+      buff += Tuple2(point, matrix)
     }
     buff.toList
   }
