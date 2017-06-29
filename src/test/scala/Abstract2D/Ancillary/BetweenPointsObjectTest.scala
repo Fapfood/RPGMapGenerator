@@ -25,4 +25,25 @@ class BetweenPointsObjectTest extends FunSuite {
       assert(math.abs(pp1.y - pp2.y) <= 1)
     }
   }
+
+  test("Regular test 1"){
+    val p1 = Point(1,4)
+    val p2 = Point(9,4)
+    val a = new BetweenPointsObject {}.planIdealPath(p1,p2)
+    val expectedOut = List(
+      Point(1,4),
+      Point(2,4),
+      Point(3,4),
+      Point(3,3),
+      Point(4,3),
+      Point(5,3),
+      Point(5,2),
+      Point(6,2),
+      Point(7,2),
+      Point(7,1),
+      Point(8,1),
+      Point(9,1)
+    )
+    assert(a == expectedOut)
+  }
 }
