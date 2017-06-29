@@ -88,4 +88,11 @@ class BetweenPointsObjectTest extends FunSuite {
     val a = new BetweenPointsObject {}.planIdealPath(p1,p1)
     assert(a == List(Point(1,1)))
   }
+
+  test("Single point path for different objects"){
+    val p1 = Point(1,1)
+    val p2 = Point(1,1)
+    val a = new BetweenPointsObject {}.planIdealPath(p1,p2)
+    assert(a == List(Point(1,1)))
+  }
 }
