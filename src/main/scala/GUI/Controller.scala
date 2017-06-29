@@ -7,7 +7,7 @@ import Abstract2D.Objects._
 import Abstract3D.Abstract3DMapGenerator
 import Ancillary.Point
 import Randomization.TileGenerator
-import Generator.ImageCreator
+import Generator.{ImageCreator, MapGenerator}
 import java.io._
 import javax.swing.ImageIcon
 
@@ -36,7 +36,7 @@ object Controller {
     println("Generating image")
     val params = new MapParameters(width, height, treesNumber, housesNumber, exitsNumber)
     //todo: call method which will return image, then print the image.
-    val image: Image = createDebugMap()
+    val image: Image = MapGenerator.createMapWithParameters(params)
     val out: File = new File("tmp.png")
     image.output(out)
 
@@ -44,6 +44,14 @@ object Controller {
     val res = Dialog.showConfirmation(message = null, icon = img, title = "Do you want to save this image?")
     if (res == Dialog.Result.Ok) {
       save(image)
+    }
+    deleteFile("tmp.png")
+  }
+
+  private def deleteFile(path: String) = {
+    val fileTemp = new File(path)
+    if (fileTemp.exists) {
+      fileTemp.delete()
     }
   }
 
@@ -76,13 +84,4 @@ object Controller {
     MainWindow.ExitsTextField.text.toInt
   }
 
-  private def createDebugMap(): Image = {
-    val mapParams = new MapParameters(20, 15, 20, 5)
-    val map = new Abstract2DMapGenerator(mapParams).generateMap
-    val piecesOfMap = new Abstract3DMapGenerator(map).generateMap()
-    val piecesOfTile = new TileGenerator(piecesOfMap).generateMap()
-    val image = new ImageCreator(mapParams.width, mapParams.height).addTiles(piecesOfTile)
-    val out = new File("C:\\Users\\FAPFOOD\\Desktop\\Test.png")
-    image
-  }
 }
