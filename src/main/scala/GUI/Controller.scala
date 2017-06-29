@@ -15,19 +15,20 @@ import scala.swing.{Dialog, FileChooser}
 
 object Controller {
   val r = scala.util.Random
-  val WidthRange : Range = Range(300,600)
-  val HeightRange : Range = Range(300, 600)
-  val TreesRange : Range = Range(0,25)
-  val HousesRange : Range = Range(0,10)
-  val ExitsRange : Range = Range(0,5)
+  val WidthRange: Range = Range(300, 600)
+  val HeightRange: Range = Range(300, 600)
+  val TreesRange: Range = Range(0, 25)
+  val HousesRange: Range = Range(0, 10)
+  val ExitsRange: Range = Range(0, 5)
   val TextRangeMap = Map(MainWindow.ExitsTextField -> ExitsRange,
     MainWindow.HeightTextField -> HeightRange,
     MainWindow.HousesTextField -> HousesRange,
     MainWindow.TreesTextField -> TreesRange,
     MainWindow.WidthTextField -> WidthRange)
+
   def randomize(): Unit = {
     println("Randomizing")
-  for((k,v) <- TextRangeMap) k.text = (v.min + (r.nextInt(v.max - v.min) + 1)).toString
+    for ((k, v) <- TextRangeMap) k.text = (v.min + (r.nextInt(v.max - v.min) + 1)).toString
 
   }
 
@@ -35,39 +36,43 @@ object Controller {
     println("Generating image")
     val params = new MapParameters(width, height, treesNumber, housesNumber, exitsNumber)
     //todo: call method which will return image, then print the image.
-    val image : Image = createDebugMap()
-    val out : File = new File("tmp.png")
+    val image: Image = createDebugMap()
+    val out: File = new File("tmp.png")
     image.output(out)
 
     val img = new ImageIcon("tmp.png")
     val res = Dialog.showConfirmation(message = null, icon = img, title = "Do you want to save this image?")
-    if (res == Dialog.Result.Ok){
+    if (res == Dialog.Result.Ok) {
       save(image)
     }
   }
 
-  def save(image : Image): Unit = {
+  def save(image: Image): Unit = {
     val chooser = new FileChooser(null)
     //chooser.fileSelectionMode = FileChooser.SelectionMode.DirectoriesOnly
     val result = chooser.showSaveDialog(null)
-    if(result == FileChooser.Result.Approve){
+    if (result == FileChooser.Result.Approve) {
       image.output(chooser.selectedFile)
     }
   }
 
-  def width : Int = {
+  def width: Int = {
     MainWindow.WidthTextField.text.toInt
   }
-  def height : Int = {
+
+  def height: Int = {
     MainWindow.HeightTextField.text.toInt
   }
-  def treesNumber : Int = {
+
+  def treesNumber: Int = {
     MainWindow.TreesTextField.text.toInt
   }
-  def housesNumber : Int = {
+
+  def housesNumber: Int = {
     MainWindow.HousesTextField.text.toInt
   }
-  def exitsNumber : Int = {
+
+  def exitsNumber: Int = {
     MainWindow.ExitsTextField.text.toInt
   }
 
@@ -81,7 +86,7 @@ object Controller {
     map.addElement(new Tree(List(Point(1, 3))))
     map.addElement(new Tree(List(Point(2, 1))))
     map.addElement(new Tree(List(Point(3, 3))))
-    map.addElement(new Building(Point(6, 6), Point(9, 8),map.pointsList, 2))
+    map.addElement(new Building(Point(6, 6), Point(9, 8), map.pointsList, 2))
     map.addElement(new AllPaths(map))
     val piecesOfMap = new Abstract3DMapGenerator(map).generateMap()
     val piecesOfTile = new TileGenerator(piecesOfMap).generateMap()

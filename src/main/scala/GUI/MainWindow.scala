@@ -9,27 +9,29 @@ object MainWindow extends SimpleSwingApplication {
   val TreesTextField: TextField = getFilteredTextField
   val HousesTextField: TextField = getFilteredTextField
   val ExitsTextField: TextField = getFilteredTextField
+
   def top = new MainFrame {
     title = "First Swing App"
     menuBar = new MenuBar {
-      contents += new Menu("Menu"){
-        contents += new MenuItem(Action("Losuj dane"){
+      contents += new Menu("Menu") {
+        contents += new MenuItem(Action("Losuj dane") {
           Controller.randomize()
         })
-        contents += new MenuItem(Action("Generuj"){
+        contents += new MenuItem(Action("Generuj") {
           Controller.generate()
         })
       }
     }
 
     import BorderPanel.Position._
+
     contents = getTextFieldsPanel
-   // size = new Dimension(500,500)
+    // size = new Dimension(500,500)
     centerOnScreen()
   }
 
   private[this] def getTextFieldsPanel: BoxPanel = {
-    new BoxPanel(Orientation.Vertical){
+    new BoxPanel(Orientation.Vertical) {
 
       contents += getLabelAndTextField("Map Width: ", WidthTextField)
       contents += getLabelAndTextField("Map Height: ", HeightTextField)
@@ -48,7 +50,7 @@ object MainWindow extends SimpleSwingApplication {
   }
 
   private[this] def getFilteredTextField: TextField = {
-    var tField : TextField = new TextField (columns = 10){
+    var tField: TextField = new TextField(columns = 10) {
       listenTo(keys)
       reactions += { case e: KeyTyped =>
         if (!e.char.isDigit) e.consume
