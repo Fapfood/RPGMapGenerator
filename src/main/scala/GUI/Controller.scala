@@ -7,7 +7,7 @@ import Abstract2D.Objects._
 import Abstract3D.Abstract3DMapGenerator
 import Ancillary.Point
 import Randomization.TileGenerator
-import Generator.MapGenerator
+import Generator.ImageCreator
 import java.io._
 import javax.swing.ImageIcon
 
@@ -81,7 +81,7 @@ object Controller {
     val map = new Abstract2DMapGenerator(mapParams).generateMap
     val piecesOfMap = new Abstract3DMapGenerator(map).generateMap()
     val piecesOfTile = new TileGenerator(piecesOfMap).generateMap()
-    val image = new MapGenerator(mapParams.width, mapParams.height).addTiles(piecesOfTile)
+    val image = new ImageCreator(mapParams.width, mapParams.height).addTiles(piecesOfTile)
     val out = new File("C:\\Users\\FAPFOOD\\Desktop\\Test.png")
     image
   }

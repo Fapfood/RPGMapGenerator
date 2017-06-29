@@ -5,7 +5,7 @@ import java.io.File
 import Ancillary.Point
 import com.sksamuel.scrimage.{Image, Position}
 
-class MapGenerator(x: Int, y: Int) {
+class ImageCreator(x: Int, y: Int) {
   private val TILE_SIDE = 32
   private var image: Image = makeImage(x, y)
 
