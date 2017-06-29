@@ -14,25 +14,30 @@ class AllPaths(map: Map) extends MapObject {
     val firstClassPoints = collection.mutable.ListBuffer.empty[Point]
     val secondClassPoints = collection.mutable.ListBuffer.empty[Point]
     for (p <- getEntryPoints)
-      if (isOutsideMap(p))
-        firstClassPoints += p
-      else
+      if (map.belongsToMap(p))
         secondClassPoints += p
+      else
+        firstClassPoints += p
 
     var midpoint = findMidpoint(firstClassPoints.toList)
     if (firstClassPoints.length < 2)
       midpoint = findMidpoint(secondClassPoints.toList)
 
     if (firstClassPoints.nonEmpty) {
-      buff ++= new Path(firstClassPoints.head, midpoint, map).pointsList
+      buff ++=
+        new Path(firstClassPoints.head, midpoint, map.pointsList, map.getObstacles).pointsList
       for (p <- firstClassPoints.tail)
-        buff ++= new Path(p, getClosestPointToPath(p), map).pointsList
+        buff ++=
+          new Path(p, getClosestPointToPath(p), map.pointsList, map.getObstacles).pointsList
       for (p <- secondClassPoints)
-        buff ++= new Path(p, getClosestPointToPath(p), map).pointsList
+        buff ++=
+          new Path(p, getClosestPointToPath(p), map.pointsList, map.getObstacles).pointsList
     } else {
-      buff ++= new Path(secondClassPoints.head, midpoint, map).pointsList
+      buff ++=
+        new Path(secondClassPoints.head, midpoint, map.pointsList, map.getObstacles).pointsList
       for (p <- secondClassPoints.tail)
-        buff ++= new Path(p, getClosestPointToPath(p), map).pointsList
+        buff ++=
+          new Path(p, getClosestPointToPath(p), map.pointsList, map.getObstacles).pointsList
     }
 
     buff.toSet.toList
@@ -46,13 +51,6 @@ class AllPaths(map: Map) extends MapObject {
         buff += e.entryPoint.get
 
     buff.toList
-  }
-
-  private def isOutsideMap(point: Point): Boolean = {
-    if (point.x < 0 || point.x > map.x - 1 || point.y < 0 || point.y > map.y - 1)
-      true
-    else
-      false
   }
 
   private def findMidpoint(points: List[Point]): Point = {
@@ -81,7 +79,7 @@ class AllPaths(map: Map) extends MapObject {
     for (p <- buff.toList)
       if (point.distance(p) < distance) {
         distance = point.distance(p)
-        finded = point
+        finded = p
       }
 
     finded

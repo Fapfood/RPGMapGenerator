@@ -1,62 +1,28 @@
 package Abstract2D.Objects
 
-import Abstract2D.Map
 import Abstract2D.Ancillary.{BetweenPointsObject, MapObject}
-import Ancillary.{Perimeter, Point}
+import Ancillary.{GroupOfArea, Perimeter, Point}
 
-class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject {
-  override val pointsList: List[Point] = planPath(startPoint, endPoint, map)
+class Path(startPoint: Point, endPoint: Point, workArea: List[Point], obstacles: List[Point]) extends MapObject {
+  override val pointsList: List[Point] = planPath(startPoint, endPoint)
   override val hardness: Int = 0
 
-  private def planPath(startPoint: Point, endPoint: Point, map: Map): List[Point] = {
-    val graph = createGraphBetween(startPoint, endPoint, map)
+  private def planPath(startPoint: Point, endPoint: Point): List[Point] = {
+    if (!workArea.contains(startPoint) || !workArea.contains(endPoint)
+      || obstacles.contains(startPoint) || obstacles.contains(endPoint))
+      throw new Exception("Wrong end points for Path")
+
+
+    if (startPoint == endPoint)
+      return List(startPoint)
+
+    val graph = createGraphBetween(startPoint, endPoint, obstacles)
     val path = shortestPathsOfDijkstra(graph, startPoint, endPoint)
 
     val result = collection.mutable.ListBuffer.empty[Point]
     for (i <- 0 to path.length - 2)
       result ++= new BetweenPointsObject {}.planIdealPath(path(i), path(i + 1))
     result.toList
-  }
-
-  private def isSomethingOnTheRoad(startPoint: Point, endPoint: Point, map: Map): Option[Point] = {
-    val idealPath = new BetweenPointsObject {}.planIdealPath(startPoint, endPoint)
-    var currentPoint = idealPath.head
-    var tailedPath = idealPath.tail
-
-    while (tailedPath.nonEmpty) {
-      if (map.isHardOccupied(currentPoint))
-        return Some(currentPoint)
-      currentPoint = tailedPath.head
-      tailedPath = tailedPath.tail
-    }
-    None
-  }
-
-  private def createVertices(startPoint: Point, endPoint: Point, map: Map): Set[Point] = {
-    if (map.isHardOccupied(startPoint) || map.isHardOccupied(endPoint))
-      throw new Exception("Wrong end points in Path.createVertices")
-
-    val vertices = collection.mutable.ListBuffer.empty[Point]
-    vertices += endPoint
-
-    def subVertices(startPoint: Point, endPoint: Point): Unit = {
-      if (vertices.contains(startPoint))
-        return
-
-      vertices += startPoint
-
-      isSomethingOnTheRoad(startPoint, endPoint, map) match {
-        case None =>
-        case Some(point) =>
-          val obstacle = map.getGroupOfHardPointsConnectedWith(point)
-          val putativePoints = new Perimeter {}.getSignificantPointsOfPerimeter(new Perimeter {}.getPerimeter(obstacle))
-          for (p <- putativePoints)
-            subVertices(p, endPoint)
-      }
-    }
-
-    subVertices(startPoint, endPoint)
-    vertices.toSet
   }
 
   private class Edge(val startPoint: Point, val endPoint: Point, val weight: Double) {
@@ -85,18 +51,35 @@ class Path(startPoint: Point, endPoint: Point, map: Map) extends MapObject {
     }
   }
 
-  private def createEdges(vertices: Set[Point], map: Map): List[Edge] = {
-    val buff = collection.mutable.ListBuffer.empty[Edge]
-    for (v1 <- vertices)
-      for (v2 <- vertices)
-        if (v1 != v2 && isSomethingOnTheRoad(v1, v2, map).isEmpty)
-          buff += new Edge(v1, v2, v1.distance(v2))
-    buff.toList
-  }
+  private def createGraphBetween(startPoint: Point, endPoint: Point, obstacles: List[Point]): Graph = {
+    def createVertices(startPoint: Point, endPoint: Point): Set[Point] = {
 
-  private def createGraphBetween(startPoint: Point, endPoint: Point, map: Map): Graph = {
-    val vertices = createVertices(startPoint, endPoint, map)
-    val edges = createEdges(vertices, map)
+      val vertices = collection.mutable.ListBuffer.empty[Point]
+      for (group <- GroupOfArea.getGroupsOfConnectedPoints(obstacles)) {
+        vertices ++= Perimeter.getSignificantPointsOfPerimeter(Perimeter.getPerimeter(group.toList))
+      }
+
+      vertices += startPoint
+      vertices += endPoint
+      vertices.filter(workArea.contains(_)).toSet
+    }
+
+    def createEdges(vertices: Set[Point]): List[Edge] = {
+      val buff = collection.mutable.ListBuffer.empty[Edge]
+      for (v1 <- vertices)
+        for (v2 <- vertices)
+          if (v1 != v2 && !isSomethingOnTheRoad(v1, v2, obstacles))
+            buff += new Edge(v1, v2, v1.distance(v2))
+      buff.toList
+    }
+
+    def isSomethingOnTheRoad(startPoint: Point, endPoint: Point, obstacles: List[Point]): Boolean = {
+      val idealPath = new BetweenPointsObject {}.planIdealPath(startPoint, endPoint).toSet
+      (idealPath intersect obstacles.toSet).nonEmpty
+    }
+
+    val vertices = createVertices(startPoint, endPoint)
+    val edges = createEdges(vertices)
     new Graph(vertices, edges)
   }
 
