@@ -11,13 +11,13 @@ object MainWindow extends SimpleSwingApplication {
   val ExitsTextField: TextField = getFilteredTextField
 
   def top = new MainFrame {
-    title = "First Swing App"
+    title = "RPGMapGenerator3000"
     menuBar = new MenuBar {
       contents += new Menu("Menu") {
-        contents += new MenuItem(Action("Losuj dane") {
+        contents += new MenuItem(Action("Randomize") {
           Controller.randomize()
         })
-        contents += new MenuItem(Action("Generuj") {
+        contents += new MenuItem(Action("Generate") {
           Controller.generate()
         })
       }
