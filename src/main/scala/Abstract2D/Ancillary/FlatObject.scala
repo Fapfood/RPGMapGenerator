@@ -28,7 +28,7 @@ trait FlatObject {
       throw new Exception("Wrong weight map in nearest points method")
 
     val pointToDistance = collection.mutable.Map.empty[Point, Int]
-    for (consideredPoint <- new Perimeter {}.getPerimeter(previousPoints))
+    for (consideredPoint <- Perimeter.getPerimeter(previousPoints))
       if (!pointToDistance.contains(consideredPoint)) {
         var distance = consideredPoint.stepDistance(previousPoints.last) * impElemsToWeight(0) // to start point
         var tailed = previousPoints
