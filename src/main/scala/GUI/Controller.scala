@@ -32,20 +32,24 @@ object Controller {
 
   }
 
+  private var tmpCounter: Int = 0
+
   def generate(): Unit = {
     println("Generating image")
     val params = new MapParameters(width, height, treesNumber, housesNumber, exitsNumber)
-    //todo: call method which will return image, then print the image.
+
     val image: Image = MapGenerator.createMapWithParameters(params)
-    val out: File = new File("tmp.png")
+    val tmpFileName = "tmp" + tmpCounter.toString + ".png"
+    tmpCounter = tmpCounter + 1
+    val out: File = new File(tmpFileName)
     image.output(out)
 
-    val img = new ImageIcon("tmp.png")
+    val img = new ImageIcon(tmpFileName)
     val res = Dialog.showConfirmation(message = null, icon = img, title = "Do you want to save this image?")
     if (res == Dialog.Result.Ok) {
       save(image)
     }
-    deleteFile("tmp.png")
+    out.delete()
   }
 
   private def deleteFile(path: String) = {
