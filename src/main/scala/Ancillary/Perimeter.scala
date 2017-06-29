@@ -1,6 +1,6 @@
 package Ancillary
 
-trait Perimeter {
+object Perimeter {
   def getPerimeter(shape: List[Point]): List[Point] = {
     val buff = collection.mutable.ListBuffer.empty[Point]
 
