@@ -87,10 +87,10 @@ class Abstract3DMapGenerator(val map: Map) {
 
         case building: Building =>
           for (tuple <- getTypicalTuples(building.pointsList))
-            buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 2, tuple._2)
+            buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 3, tuple._2)
 
           // door
-          if (building.bottomRight.y + 1 == building.entryPoint.get.y) {
+          if (building.entryPoint.nonEmpty && building.bottomRight.y + 1 == building.entryPoint.get.y) {
             val doorBottomMatrix = Array.fill(1, 2)(false)
             doorBottomMatrix(0)(1) = true
             val doorTopMatrix = Array.fill(1, 2)(false)
