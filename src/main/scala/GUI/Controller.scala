@@ -81,7 +81,7 @@ object Controller {
     map.addElement(new Tree(List(Point(1, 3))))
     map.addElement(new Tree(List(Point(2, 1))))
     map.addElement(new Tree(List(Point(3, 3))))
-    map.addElement(new Building(Point(6, 6), Point(9, 8), 2))
+    map.addElement(new Building(Point(6, 6), Point(9, 8),map.pointsList, 2))
     map.addElement(new AllPaths(map))
     val piecesOfMap = new Abstract3DMapGenerator(map).generateMap()
     val piecesOfTile = new TileGenerator(piecesOfMap).generateMap()
