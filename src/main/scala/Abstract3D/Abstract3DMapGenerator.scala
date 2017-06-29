@@ -1,12 +1,11 @@
 package Abstract3D
 
-import Abstract2D.Map
-import Abstract2D.Ancillary.MapObject
 import Abstract2D.Containers.{AllGrass, AllGround, AllPaths}
+import Abstract2D.Map
 import Abstract2D.Objects._
 import Ancillary.{Perimeter, Point}
 
-class Abstract3DMapGenerator(val map: Map) extends Perimeter {
+class Abstract3DMapGenerator(val map: Map) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]
 
   def generateMap(): List[PieceOfMap] = {
@@ -58,9 +57,9 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
         case building: Building =>
           val points = collection.mutable.ListBuffer.empty[Point]
 
-          for (x <- building.leftTopCorner.x to building.rightBottomCorner.x)
-            for (y <- building.rightBottomCorner.y - building.heightOfStorey * building.numberOfStoreys + 1
-              to building.rightBottomCorner.y)
+          for (x <- building.topLeft.x to building.bottomRight.x)
+            for (y <- building.bottomRight.y - building.heightOfStorey * building.numberOfStoreys + 1
+              to building.bottomRight.y)
               points += Point(x, y)
 
           for (tuple <- getTypicalTuples(points.toList))
@@ -91,7 +90,7 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
             buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 2, tuple._2)
 
           // door
-          if (building.rightBottomCorner.y + 1 == building.entryPoint.get.y) {
+          if (building.bottomRight.y + 1 == building.entryPoint.get.y) {
             val doorBottomMatrix = Array.fill(1, 2)(false)
             doorBottomMatrix(0)(1) = true
             val doorTopMatrix = Array.fill(1, 2)(false)
@@ -118,7 +117,7 @@ class Abstract3DMapGenerator(val map: Map) extends Perimeter {
       val matrix = Array.fill(3, 3)(false)
       matrix(1)(1) = true
 
-      for (p <- getPerimeter(List(point)))
+      for (p <- Perimeter.getPerimeter(List(point)))
         if (points.contains(p))
           matrix(1 - (point - p).x)(1 - (point - p).y) = true
       buff += Tuple2(point, matrix)
