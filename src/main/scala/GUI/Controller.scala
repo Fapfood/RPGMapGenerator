@@ -2,7 +2,7 @@ package GUI
 
 import com.sksamuel.scrimage.Image
 import Abstract2D.Containers.{AllGrass, AllGround, AllPaths}
-import Abstract2D.Map
+import Abstract2D.{Abstract2DMapGenerator, Map}
 import Abstract2D.Objects._
 import Abstract3D.Abstract3DMapGenerator
 import Ancillary.Point
@@ -77,23 +77,12 @@ object Controller {
   }
 
   private def createDebugMap(): Image = {
-    val map = new Map(25, 25)
-    map.addElement(new AllGrass(new Grass(Point(0, 0), Point(24, 24)), new AllGround(List.empty[Ground])))
-    map.addElement(new Signpost(Point(3, 4), Point(4, 4)))
-    map.addElement(new Signpost(Point(-1, 0), Point(0, 0)))
-    map.addElement(new Tree(List(Point(1, 1))))
-    map.addElement(new Tree(List(Point(1, 2))))
-    map.addElement(new Tree(List(Point(1, 3))))
-    map.addElement(new Tree(List(Point(2, 1))))
-    map.addElement(new Tree(List(Point(3, 3))))
-    map.addElement(new Building(Point(6, 6), Point(9, 8), map.pointsList, 2))
-    map.addElement(new AllPaths(map))
+    val mapParams = new MapParameters(20, 15, 20, 5)
+    val map = new Abstract2DMapGenerator(mapParams).generateMap
     val piecesOfMap = new Abstract3DMapGenerator(map).generateMap()
     val piecesOfTile = new TileGenerator(piecesOfMap).generateMap()
-
-    val gen = new MapGenerator(25, 25)
-    for (el <- piecesOfTile)
-      gen.addTileOn(el._3, el._1)
-    gen.image
+    val image = new MapGenerator(mapParams.width, mapParams.height).addTiles(piecesOfTile)
+    val out = new File("C:\\Users\\FAPFOOD\\Desktop\\Test.png")
+    image
   }
 }
