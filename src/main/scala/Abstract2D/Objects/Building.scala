@@ -11,9 +11,9 @@ class Building(val topLeft: Point, val bottomRight: Point, workArea: List[Point]
   override val heightOfStorey: Int = wallHeight
   override val numberOfStoreys: Int = 1
   override val hardness: Int = 1
-  override val entryPoint: Option[Point] = Option(chooseDoor())
+  override val entryPoint: Option[Point] = chooseDoor()
 
-  private def chooseDoor(): Point = {
+  private def chooseDoor(): Option[Point] = {
     val points = Perimeter.getPerimeter(pointsList)
       .filter(p => if (
         ((p.x >= topLeft.x + 1
@@ -22,7 +22,7 @@ class Building(val topLeft: Point, val bottomRight: Point, workArea: List[Point]
           && p.y <= bottomRight.y - 1))
           && workArea.contains(p)
       ) true else false)
-    points(Random.nextInt(points.length))
+    if (points.nonEmpty) Option(points(Random.nextInt(points.length))) else None
   }
 
   //  object CasualShape extends Enumeration {
