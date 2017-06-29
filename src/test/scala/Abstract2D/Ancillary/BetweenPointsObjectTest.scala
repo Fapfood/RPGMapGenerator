@@ -28,21 +28,57 @@ class BetweenPointsObjectTest extends FunSuite {
 
   test("Regular test 1"){
     val p1 = Point(1,4)
-    val p2 = Point(9,4)
+    val p2 = Point(9,1)
     val a = new BetweenPointsObject {}.planIdealPath(p1,p2)
     val expectedOut = List(
       Point(1,4),
       Point(2,4),
-      Point(3,4),
+      Point(2,3),
       Point(3,3),
       Point(4,3),
       Point(5,3),
       Point(5,2),
       Point(6,2),
       Point(7,2),
-      Point(7,1),
+      Point(8,2),
       Point(8,1),
       Point(9,1)
+    )
+    assert(a == expectedOut)
+  }
+
+  test("Regular test 1 flipped"){
+    val p1 = Point(4, 1)
+    val p2 = Point(1, 9)
+    val a = new BetweenPointsObject {}.planIdealPath(p1,p2)
+    val expectedOut = List(
+      Point(4,1),
+      Point(4,2),
+      Point(3,2),
+      Point(3,3),
+      Point(3,4),
+      Point(3,5),
+      Point(2,5),
+      Point(2,6),
+      Point(2,7),
+      Point(2,8),
+      Point(1,8),
+      Point(1,9)
+    )
+    assert(a == expectedOut)
+  }
+
+  test("Vertical line test"){
+    val p1 = Point(2,0)
+    val p2 = Point(2,5)
+    val a = new BetweenPointsObject {}.planIdealPath(p1,p2)
+    val expectedOut = List(
+      Point(2,0),
+      Point(2,1),
+      Point(2,2),
+      Point(2,3),
+      Point(2,4),
+      Point(2,5)
     )
     assert(a == expectedOut)
   }
