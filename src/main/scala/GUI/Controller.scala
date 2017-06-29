@@ -52,13 +52,6 @@ object Controller {
     out.delete()
   }
 
-  private def deleteFile(path: String) = {
-    val fileTemp = new File(path)
-    if (fileTemp.exists) {
-      fileTemp.delete()
-    }
-  }
-
   def save(image: Image): Unit = {
     val chooser = new FileChooser(null)
     //chooser.fileSelectionMode = FileChooser.SelectionMode.DirectoriesOnly
