@@ -1,7 +1,6 @@
-package Abstract2D.Containers
+package Abstract2D.Base
 
 import Abstract2D.Ancillary.MapObject
-import Abstract2D.Objects.Ground
 import Ancillary.Point
 
 class AllGround(grounds: List[Ground]) extends MapObject {
