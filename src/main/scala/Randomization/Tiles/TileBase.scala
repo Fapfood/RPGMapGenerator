@@ -1,13 +1,16 @@
-package Randomization
+package Randomization.Tiles
 
 import java.io.File
 
 import com.sksamuel.scrimage.{Image, Position}
 
+import scala.collection.concurrent.TrieMap
+
 sealed abstract class TileBase(tilesetName: String) {
   protected val TILE_SIDE = 32
   protected val empty: Image = Image.fromFile(new File("resources\\Empty.png"))
   protected val image: Image = Image.fromFile(new File("resources\\tilesets\\" + tilesetName))
+  protected val memoization = new TrieMap[Array[Array[Boolean]], Image]()
 
   def getTileFor(map3x3: Array[Array[Boolean]]): Image = empty
 }
@@ -16,11 +19,17 @@ case class DirectTile(tilesetName: String, x_start: Int, x_end: Int, y_start: In
   extends TileBase(tilesetName) {
 
   override def getTileFor(mapNxM: Array[Array[Boolean]]): Image = {
+    if (memoization.contains(mapNxM))
+      return memoization(mapNxM)
+
     for (x <- mapNxM.indices)
       for (y <- mapNxM(0).indices)
-        if (mapNxM(x)(y))
-          return image.translate(-TILE_SIDE * (x_start + x), -TILE_SIDE * (y_start + y))
+        if (mapNxM(x)(y)) {
+          val img = image.translate(-TILE_SIDE * (x_start + x), -TILE_SIDE * (y_start + y))
             .resizeTo(TILE_SIDE, TILE_SIDE, Position.TopLeft)
+          memoization += (mapNxM -> img)
+          return img
+        }
     empty
   }
 }
@@ -31,8 +40,14 @@ class FoldingStraightTile(override val tilesetName: String, override val x_start
   override val y_offset = 0
 
   override def getTileFor(map3x3: Array[Array[Boolean]]): Image = {
+    if (memoization.contains(map3x3))
+      return memoization(map3x3)
+
     var img = empty
-    if (!map3x3(1)(1)) return img
+    if (!map3x3(1)(1)) {
+      memoization += (map3x3 -> img)
+      return img
+    }
 
     //Position.TopLeft
     if (map3x3(1)(0) && map3x3(0)(1)) img = img.overlay(getStraightPart(10))
@@ -58,6 +73,7 @@ class FoldingStraightTile(override val tilesetName: String, override val x_start
     else if (map3x3(2)(1)) img = img.overlay(getStraightPart(13))
     else img = img.overlay(getStraightPart(15))
 
+    memoization += (map3x3 -> img)
     img
   }
 }
@@ -94,8 +110,14 @@ case class FoldingComplexTile(tilesetName: String, x_start: Int, y_start: Int)
   }
 
   override def getTileFor(map3x3: Array[Array[Boolean]]): Image = {
+    if (memoization.contains(map3x3))
+      return memoization(map3x3)
+
     var img = empty
-    if (!map3x3(1)(1)) return img
+    if (!map3x3(1)(1)) {
+      memoization += (map3x3 -> img)
+      return img
+    }
 
     //Position.TopLeft
     if (!map3x3(0)(0) && map3x3(1)(0) && map3x3(0)(1)) img = img.overlay(getSpecialPart(0))
@@ -125,6 +147,7 @@ case class FoldingComplexTile(tilesetName: String, x_start: Int, y_start: Int)
     else if (map3x3(2)(1)) img = img.overlay(getStraightPart(13))
     else img = img.overlay(getStraightPart(15))
 
+    memoization += (map3x3 -> img)
     img
   }
 }
