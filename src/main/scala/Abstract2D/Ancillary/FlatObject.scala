@@ -4,7 +4,7 @@ import Ancillary.{Perimeter, Point}
 
 import scala.util.Random
 
-trait FlatObject {
+object FlatObject {
   def buildBase(previousPoints: List[Point], area: Int, weights: List[Int] = List(1, 1)): List[Point] = {
     if (previousPoints.length > area)
       throw new Exception("Too little area in FlatObject.build")

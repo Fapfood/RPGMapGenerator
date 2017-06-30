@@ -2,7 +2,7 @@ package Abstract2D.Ancillary
 
 import Ancillary.Point
 
-trait RectangularObject {
+object RectangularObject {
   def buildBase(leftTop: Point, rightBottom: Point): List[Point] = {
     val buff = collection.mutable.ListBuffer.empty[Point]
 

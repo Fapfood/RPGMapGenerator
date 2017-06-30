@@ -2,7 +2,7 @@ package Abstract2D.Ancillary
 
 import Ancillary.Point
 
-trait BetweenPointsObject {
+object BetweenPointsObject {
 
   def planIdealPath(startPoint: Point, endPoint: Point, balance: Double = 0.5): List[Point] = {
     if (balance < 0 || balance > 1)
