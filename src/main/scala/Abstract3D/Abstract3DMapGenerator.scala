@@ -1,14 +1,17 @@
 package Abstract3D
 
-import Abstract2D.Containers.{AllGrass, AllGround, AllPaths}
+import Abstract2D.Base._
 import Abstract2D.Map
 import Abstract2D.Objects._
+import Abstract3D.PiecesOfMap._
 import Ancillary.{Perimeter, Point}
+
+import scala.util.Random
 
 class Abstract3DMapGenerator(val map: Map) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]
 
-  def generateMap(): List[PieceOfMap] = {
+  def generateMap: List[PieceOfMap] = {
     generateLayer0()
     generateLayer1()
     generateLayer2()
@@ -21,15 +24,15 @@ class Abstract3DMapGenerator(val map: Map) {
       el match {
         case path: AllPaths =>
           for (tuple <- getTypicalTuples(path.pointsList))
-            buff += PieceOfPath(tuple._1, 0, tuple._2)
+            buff += PieceOfPath(tuple._1, 0, tuple._2, 0)
 
         case ground: AllGround =>
           for (tuple <- getTypicalTuples(ground.pointsList))
-            buff += PieceOfGround(tuple._1, 0, tuple._2)
+            buff += PieceOfGround(tuple._1, 0, tuple._2, 0)
 
         case grass: AllGrass =>
           for (tuple <- getTypicalTuples(grass.pointsList))
-            buff += PieceOfGrass(tuple._1, 0, tuple._2)
+            buff += PieceOfGrass(tuple._1, 0, tuple._2, 0)
 
         case _ =>
       }
@@ -40,19 +43,26 @@ class Abstract3DMapGenerator(val map: Map) {
       el match {
         case tree: Tree =>
           val x_min = tree.pointsList.map(_.x).min
-          // korona drzewa
           val y_min = tree.pointsList.map(_.y).min - 1
+          // bo korona drzewa
           val x_max = tree.pointsList.map(_.x).max
           val y_max = tree.pointsList.map(_.y).max
 
+          val rand = Random.nextInt(4)
           for (point <- tree.pointsList) {
-            val treeMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
-            treeMatrix(point.x - x_min)(point.y - y_min) = true
-            buff += PieceOfTree(point, 1, treeMatrix)
+            val rootMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
+            rootMatrix(point.x - x_min)(point.y - y_min) = true
+
+            val branchMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
+            branchMatrix(point.x - x_min)(point.y - y_min - 1) = true
+
+            buff += PieceOfTree(point, 1, rootMatrix, rand)
+            buff += PieceOfTree(point - Point(0, 1), 2, branchMatrix, rand)
           }
 
         case signpost: Signpost =>
-          buff += PieceOfSign(signpost.pointsList.head, 1, Array.fill(1, 1)(true))
+          val rand = Random.nextInt(2)
+          buff += PieceOfSign(signpost.pointsList.head, 1, Array.fill(1, 1)(true), rand)
 
         case building: Building =>
           val points = collection.mutable.ListBuffer.empty[Point]
@@ -62,8 +72,9 @@ class Abstract3DMapGenerator(val map: Map) {
               to building.bottomRight.y)
               points += Point(x, y)
 
+          val rand = Random.nextInt(2)
           for (tuple <- getTypicalTuples(points.toList))
-            buff += PieceOfWall(tuple._1, 1, tuple._2)
+            buff += PieceOfWall(tuple._1, 1, tuple._2, rand)
 
         case _ =>
       }
@@ -72,22 +83,10 @@ class Abstract3DMapGenerator(val map: Map) {
   private def generateLayer2(): Unit = {
     for (el <- map.getElements)
       el match {
-        case tree: Tree =>
-          val x_min = tree.pointsList.map(_.x).min
-          //korona drzewa
-          val y_min = tree.pointsList.map(_.y).min - 1
-          val x_max = tree.pointsList.map(_.x).max
-          val y_max = tree.pointsList.map(_.y).max
-
-          for (point <- tree.pointsList) {
-            val treeMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
-            treeMatrix(point.x - x_min)(point.y - y_min - 1) = true
-            buff += PieceOfTree(point - Point(0, 1), 2, treeMatrix)
-          }
-
         case building: Building =>
+          val rand = Random.nextInt(2)
           for (tuple <- getTypicalTuples(building.pointsList))
-            buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 3, tuple._2)
+            buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 3, tuple._2, rand)
 
           // door
           if (building.entryPoint.nonEmpty && building.bottomRight.y + 1 == building.entryPoint.get.y) {
@@ -95,8 +94,8 @@ class Abstract3DMapGenerator(val map: Map) {
             doorBottomMatrix(0)(1) = true
             val doorTopMatrix = Array.fill(1, 2)(false)
             doorTopMatrix(0)(0) = true
-            buff += PieceOfDoor(building.entryPoint.get - Point(0, 1), 2, doorBottomMatrix)
-            buff += PieceOfDoor(building.entryPoint.get - Point(0, 2), 2, doorTopMatrix)
+            buff += PieceOfDoor(building.entryPoint.get - Point(0, 1), 2, doorBottomMatrix, 0)
+            buff += PieceOfDoor(building.entryPoint.get - Point(0, 2), 2, doorTopMatrix, 0)
           }
 
         case _ =>
