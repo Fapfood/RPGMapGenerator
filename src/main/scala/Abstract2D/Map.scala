@@ -5,7 +5,7 @@ import _root_.Ancillary.Point
 
 class Map(val x: Int, val y: Int) {
   private val elems = collection.mutable.ListBuffer.empty[MapObject]
-  val pointsList: List[Point] = new RectangularObject {}.buildBase(Point(), Point(x - 1, y - 1))
+  val pointsList: List[Point] = RectangularObject.buildBase(Point(), Point(x - 1, y - 1))
 
   def addElement(elem: MapObject): Unit = elems += elem
 
