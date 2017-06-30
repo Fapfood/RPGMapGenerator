@@ -3,5 +3,5 @@ package Abstract3D.PiecesOfMap
 import Abstract3D.PieceOfMap
 import Ancillary.Point
 
-case class PieceOfTree(point: Point, layer: Int, mapNxM: Array[Array[Boolean]], randomize: Int)
-  extends PieceOfMap(point, layer, mapNxM, randomize)
+case class PieceOfTree(objectId: Int, point: Point, mapNxM: Array[Array[Boolean]], layer: Int)
+  extends PieceOfMap(objectId, point, mapNxM, layer)
