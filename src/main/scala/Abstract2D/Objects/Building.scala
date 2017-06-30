@@ -7,7 +7,7 @@ import scala.util.Random
 
 class Building(val topLeft: Point, val bottomRight: Point, workArea: List[Point], wallHeight: Int)
   extends MapObject with BlockObject {
-  override val pointsList: List[Point] = new RectangularObject {}.buildBase(topLeft, bottomRight)
+  override val pointsList: List[Point] = RectangularObject.buildBase(topLeft, bottomRight)
   override val heightOfStorey: Int = wallHeight
   override val numberOfStoreys: Int = 1
   override val hardness: Int = 1
