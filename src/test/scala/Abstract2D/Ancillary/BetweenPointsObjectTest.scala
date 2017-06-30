@@ -8,7 +8,7 @@ class BetweenPointsObjectTest extends FunSuite {
   test("Start and finish are correct") {
     val p1 = Point(0, 0)
     val p2 = Point(10, 10)
-    val a: List[Point] = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a: List[Point] = BetweenPointsObject.planIdealPath(p1, p2)
     assert(a.head == p1)
     assert(a.last == p2)
   }
@@ -16,7 +16,7 @@ class BetweenPointsObjectTest extends FunSuite {
   test("Points are connected") {
     val p1 = Point(3, 4)
     val p2 = Point(12, 14)
-    val a: List[Point] = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a: List[Point] = BetweenPointsObject.planIdealPath(p1, p2)
     a.sliding(2).foreach { twoPoints =>
       val (pp1, pp2) = (twoPoints.head, twoPoints.last)
       assert(math.abs(pp1.x - pp2.x) <= 1)
@@ -27,7 +27,7 @@ class BetweenPointsObjectTest extends FunSuite {
   test("Regular test 1") {
     val p1 = Point(1, 4)
     val p2 = Point(9, 1)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a = BetweenPointsObject.planIdealPath(p1, p2)
     val expectedOut = List(
       Point(1, 4),
       Point(2, 4),
@@ -48,7 +48,7 @@ class BetweenPointsObjectTest extends FunSuite {
   test("Regular test 1 flipped") {
     val p1 = Point(4, 1)
     val p2 = Point(1, 9)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a = BetweenPointsObject.planIdealPath(p1, p2)
     val expectedOut = List(
       Point(4, 1),
       Point(4, 2),
@@ -69,7 +69,7 @@ class BetweenPointsObjectTest extends FunSuite {
   test("Vertical line test") {
     val p1 = Point(2, 0)
     val p2 = Point(2, 5)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a = BetweenPointsObject.planIdealPath(p1, p2)
     val expectedOut = List(
       Point(2, 0),
       Point(2, 1),
@@ -83,27 +83,27 @@ class BetweenPointsObjectTest extends FunSuite {
 
   test("Single point path") {
     val p1 = Point(1, 1)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p1)
+    val a = BetweenPointsObject.planIdealPath(p1, p1)
     assert(a == List(Point(1, 1)))
   }
 
   test("Single point path for different objects") {
     val p1 = Point(1, 1)
     val p2 = Point(1, 1)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a = BetweenPointsObject.planIdealPath(p1, p2)
     assert(a == List(Point(1, 1)))
   }
 
   test("Single point path for (4,4)") {
     val p1 = Point(4, 4)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p1)
+    val a = BetweenPointsObject.planIdealPath(p1, p1)
     assert(a == List(Point(4, 4)))
   }
 
   test("Single point path for (4,4) with different objects") {
     val p1 = Point(4, 4)
     val p2 = Point(4, 4)
-    val a = new BetweenPointsObject {}.planIdealPath(p1, p2)
+    val a = BetweenPointsObject.planIdealPath(p1, p2)
     assert(a == List(Point(4, 4)))
   }
 }
