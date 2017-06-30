@@ -1,15 +1,10 @@
 package GUI
 
-import com.sksamuel.scrimage.Image
-import Abstract2D.Containers.{AllGrass, AllGround, AllPaths}
-import Abstract2D.{Abstract2DMapGenerator, Map}
-import Abstract2D.Objects._
-import Abstract3D.Abstract3DMapGenerator
-import Ancillary.Point
-import Randomization.TileGenerator
-import Generator.{ImageCreator, MapGenerator}
 import java.io._
 import javax.swing.ImageIcon
+
+import Generator.MapGenerator
+import com.sksamuel.scrimage.Image
 
 import scala.swing.{Dialog, FileChooser}
 
