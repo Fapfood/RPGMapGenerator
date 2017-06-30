@@ -4,12 +4,11 @@ import Abstract2D.Base._
 import Abstract2D.Map
 import Abstract2D.Objects._
 import Abstract3D.PiecesOfMap._
-import Ancillary.{Perimeter, Point}
+import Ancillary.{ArrayGetter, Point}
 
-import scala.util.Random
-
-class Abstract3DMapGenerator(val map: Map) {
+class PieceOfMapGenerator(map: Map) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]
+  private var id = 0
 
   def generateMap: List[PieceOfMap] = {
     generateLayer0()
@@ -23,16 +22,19 @@ class Abstract3DMapGenerator(val map: Map) {
     for (el <- map.getElements)
       el match {
         case path: AllPaths =>
-          for (tuple <- getTypicalTuples(path.pointsList))
-            buff += PieceOfPath(tuple._1, 0, tuple._2, 0)
+          val id = giveId
+          for (tuple <- ArrayGetter.fromList(path.pointsList))
+            buff += PieceOfPath(id, tuple._1, tuple._2, 0)
 
         case ground: AllGround =>
-          for (tuple <- getTypicalTuples(ground.pointsList))
-            buff += PieceOfGround(tuple._1, 0, tuple._2, 0)
+          val id = giveId
+          for (tuple <- ArrayGetter.fromList(ground.pointsList))
+            buff += PieceOfGround(id, tuple._1, tuple._2, 0)
 
         case grass: AllGrass =>
-          for (tuple <- getTypicalTuples(grass.pointsList))
-            buff += PieceOfGrass(tuple._1, 0, tuple._2, 0)
+          val id = giveId
+          for (tuple <- ArrayGetter.fromList(grass.pointsList))
+            buff += PieceOfGrass(id, tuple._1, tuple._2, 0)
 
         case _ =>
       }
@@ -48,7 +50,7 @@ class Abstract3DMapGenerator(val map: Map) {
           val x_max = tree.pointsList.map(_.x).max
           val y_max = tree.pointsList.map(_.y).max
 
-          val rand = Random.nextInt(4)
+          val id = giveId
           for (point <- tree.pointsList) {
             val rootMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
             rootMatrix(point.x - x_min)(point.y - y_min) = true
@@ -56,13 +58,12 @@ class Abstract3DMapGenerator(val map: Map) {
             val branchMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
             branchMatrix(point.x - x_min)(point.y - y_min - 1) = true
 
-            buff += PieceOfTree(point, 1, rootMatrix, rand)
-            buff += PieceOfTree(point - Point(0, 1), 2, branchMatrix, rand)
+            buff += PieceOfTree(id, point, rootMatrix, 1)
+            buff += PieceOfTree(id, point - Point(0, 1), branchMatrix, 2)
           }
 
         case signpost: Signpost =>
-          val rand = Random.nextInt(2)
-          buff += PieceOfSign(signpost.pointsList.head, 1, Array.fill(1, 1)(true), rand)
+          buff += PieceOfSign(giveId, signpost.pointsList.head, Array.fill(1, 1)(true), 1)
 
         case building: Building =>
           val points = collection.mutable.ListBuffer.empty[Point]
@@ -72,9 +73,9 @@ class Abstract3DMapGenerator(val map: Map) {
               to building.bottomRight.y)
               points += Point(x, y)
 
-          val rand = Random.nextInt(2)
-          for (tuple <- getTypicalTuples(points.toList))
-            buff += PieceOfWall(tuple._1, 1, tuple._2, rand)
+          val id = giveId
+          for (tuple <- ArrayGetter.fromList(points.toList))
+            buff += PieceOfWall(id, tuple._1, tuple._2, 1)
 
         case _ =>
       }
@@ -84,18 +85,19 @@ class Abstract3DMapGenerator(val map: Map) {
     for (el <- map.getElements)
       el match {
         case building: Building =>
-          val rand = Random.nextInt(2)
-          for (tuple <- getTypicalTuples(building.pointsList))
-            buff += PieceOfRoof(tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), 3, tuple._2, rand)
+          val id = giveId
+          for (tuple <- ArrayGetter.fromList(building.pointsList))
+            buff += PieceOfRoof(id, tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), tuple._2, 3)
 
           // door
           if (building.entryPoint.nonEmpty && building.bottomRight.y + 1 == building.entryPoint.get.y) {
+            val id = giveId
             val doorBottomMatrix = Array.fill(1, 2)(false)
             doorBottomMatrix(0)(1) = true
             val doorTopMatrix = Array.fill(1, 2)(false)
             doorTopMatrix(0)(0) = true
-            buff += PieceOfDoor(building.entryPoint.get - Point(0, 1), 2, doorBottomMatrix, 0)
-            buff += PieceOfDoor(building.entryPoint.get - Point(0, 2), 2, doorTopMatrix, 0)
+            buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 1), doorBottomMatrix, 2)
+            buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 2), doorTopMatrix, 2)
           }
 
         case _ =>
@@ -109,18 +111,8 @@ class Abstract3DMapGenerator(val map: Map) {
       }
   }
 
-  private def getTypicalTuples(points: List[Point]): List[(Point, Array[Array[Boolean]])] = {
-    val buff = collection.mutable.ListBuffer.empty[(Point, Array[Array[Boolean]])]
-
-    for (point <- points) {
-      val matrix = Array.fill(3, 3)(false)
-      matrix(1)(1) = true
-
-      for (p <- Perimeter.getPerimeter(List(point)))
-        if (points.contains(p))
-          matrix(1 - (point - p).x)(1 - (point - p).y) = true
-      buff += Tuple2(point, matrix)
-    }
-    buff.toList
+  private def giveId: Int = {
+    id += 1
+    id
   }
 }
