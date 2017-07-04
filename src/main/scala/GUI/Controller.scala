@@ -3,7 +3,7 @@ package GUI
 import java.io._
 import javax.swing.ImageIcon
 
-import Generator.MapGenerator
+import Generators.MapGenerator
 import com.sksamuel.scrimage.Image
 
 import scala.swing.{Dialog, FileChooser}
