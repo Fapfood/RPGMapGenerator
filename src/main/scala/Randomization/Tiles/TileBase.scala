@@ -2,29 +2,30 @@ package Randomization.Tiles
 
 import java.io.File
 
+import Abstract3D.Matrix
 import com.sksamuel.scrimage.{Image, Position}
 
 import scala.collection.concurrent.TrieMap
 
 sealed abstract class TileBase(tilesetName: String) {
   protected val TILE_SIDE = 32
-  protected val empty: Image = Image.fromFile(new File("resources\\Empty.png"))
-  protected val image: Image = Image.fromFile(new File("resources\\tilesets\\" + tilesetName))
-  protected val memoization = new TrieMap[Array[Array[Boolean]], Image]()
+  protected val empty: Image = Image.fromFile(new File("src\\main\\resources\\Empty.png"))
+  protected val image: Image = Image.fromFile(new File("src\\main\\resources\\tilesets\\" + tilesetName))
+  protected val memoization = new TrieMap[Matrix, Image]()
 
-  def getTileFor(map3x3: Array[Array[Boolean]]): Image = empty
+  def getTileFor(map3x3: Matrix): Image = empty
 }
 
 case class DirectTile(tilesetName: String, x_start: Int, x_end: Int, y_start: Int, y_end: Int)
   extends TileBase(tilesetName) {
 
-  override def getTileFor(mapNxM: Array[Array[Boolean]]): Image = {
+  override def getTileFor(mapNxM: Matrix): Image = {
     if (memoization.contains(mapNxM))
       return memoization(mapNxM)
 
-    for (x <- mapNxM.indices)
-      for (y <- mapNxM(0).indices)
-        if (mapNxM(x)(y)) {
+    for (x <- mapNxM.indices_x)
+      for (y <- mapNxM.indices_y)
+        if (mapNxM(x, y)) {
           val img = image.translate(-TILE_SIDE * (x_start + x), -TILE_SIDE * (y_start + y))
             .resizeTo(TILE_SIDE, TILE_SIDE, Position.TopLeft)
           memoization += (mapNxM -> img)
@@ -39,38 +40,38 @@ class FoldingStraightTile(override val tilesetName: String, override val x_start
   override val x_offset = 0
   override val y_offset = 0
 
-  override def getTileFor(map3x3: Array[Array[Boolean]]): Image = {
+  override def getTileFor(map3x3: Matrix): Image = {
     if (memoization.contains(map3x3))
       return memoization(map3x3)
 
     var img = empty
-    if (!map3x3(1)(1)) {
+    if (!map3x3(1, 1)) {
       memoization += (map3x3 -> img)
       return img
     }
 
     //Position.TopLeft
-    if (map3x3(1)(0) && map3x3(0)(1)) img = img.overlay(getStraightPart(10))
-    else if (map3x3(1)(0)) img = img.overlay(getStraightPart(8))
-    else if (map3x3(0)(1)) img = img.overlay(getStraightPart(2))
+    if (map3x3(1, 0) && map3x3(0, 1)) img = img.overlay(getStraightPart(10))
+    else if (map3x3(1, 0)) img = img.overlay(getStraightPart(8))
+    else if (map3x3(0, 1)) img = img.overlay(getStraightPart(2))
     else img = img.overlay(getStraightPart(0))
 
     //Position.TopRight
-    if (map3x3(1)(0) && map3x3(2)(1)) img = img.overlay(getStraightPart(9))
-    else if (map3x3(1)(0)) img = img.overlay(getStraightPart(11))
-    else if (map3x3(2)(1)) img = img.overlay(getStraightPart(1))
+    if (map3x3(1, 0) && map3x3(2, 1)) img = img.overlay(getStraightPart(9))
+    else if (map3x3(1, 0)) img = img.overlay(getStraightPart(11))
+    else if (map3x3(2, 1)) img = img.overlay(getStraightPart(1))
     else img = img.overlay(getStraightPart(3))
 
     //Position.BottomLeft
-    if (map3x3(1)(2) && map3x3(0)(1)) img = img.overlay(getStraightPart(6))
-    else if (map3x3(1)(2)) img = img.overlay(getStraightPart(4))
-    else if (map3x3(0)(1)) img = img.overlay(getStraightPart(14))
+    if (map3x3(1, 2) && map3x3(0, 1)) img = img.overlay(getStraightPart(6))
+    else if (map3x3(1, 2)) img = img.overlay(getStraightPart(4))
+    else if (map3x3(0, 1)) img = img.overlay(getStraightPart(14))
     else img = img.overlay(getStraightPart(12))
 
     //Position.BottomRight
-    if (map3x3(1)(2) && map3x3(2)(1)) img = img.overlay(getStraightPart(5))
-    else if (map3x3(1)(2)) img = img.overlay(getStraightPart(7))
-    else if (map3x3(2)(1)) img = img.overlay(getStraightPart(13))
+    if (map3x3(1, 2) && map3x3(2, 1)) img = img.overlay(getStraightPart(5))
+    else if (map3x3(1, 2)) img = img.overlay(getStraightPart(7))
+    else if (map3x3(2, 1)) img = img.overlay(getStraightPart(13))
     else img = img.overlay(getStraightPart(15))
 
     memoization += (map3x3 -> img)
@@ -109,42 +110,42 @@ case class FoldingComplexTile(tilesetName: String, x_start: Int, y_start: Int)
       .resizeTo(TILE_SIDE, TILE_SIDE, position)
   }
 
-  override def getTileFor(map3x3: Array[Array[Boolean]]): Image = {
+  override def getTileFor(map3x3: Matrix): Image = {
     if (memoization.contains(map3x3))
       return memoization(map3x3)
 
     var img = empty
-    if (!map3x3(1)(1)) {
+    if (!map3x3(1, 1)) {
       memoization += (map3x3 -> img)
       return img
     }
 
     //Position.TopLeft
-    if (!map3x3(0)(0) && map3x3(1)(0) && map3x3(0)(1)) img = img.overlay(getSpecialPart(0))
-    else if (map3x3(1)(0) && map3x3(0)(1)) img = img.overlay(getStraightPart(10))
-    else if (map3x3(1)(0)) img = img.overlay(getStraightPart(8))
-    else if (map3x3(0)(1)) img = img.overlay(getStraightPart(2))
+    if (!map3x3(0, 0) && map3x3(1, 0) && map3x3(0, 1)) img = img.overlay(getSpecialPart(0))
+    else if (map3x3(1, 0) && map3x3(0, 1)) img = img.overlay(getStraightPart(10))
+    else if (map3x3(1, 0)) img = img.overlay(getStraightPart(8))
+    else if (map3x3(0, 1)) img = img.overlay(getStraightPart(2))
     else img = img.overlay(getStraightPart(0))
 
     //Position.TopRight
-    if (!map3x3(2)(0) && map3x3(1)(0) && map3x3(2)(1)) img = img.overlay(getSpecialPart(1))
-    else if (map3x3(1)(0) && map3x3(2)(1)) img = img.overlay(getStraightPart(9))
-    else if (map3x3(1)(0)) img = img.overlay(getStraightPart(11))
-    else if (map3x3(2)(1)) img = img.overlay(getStraightPart(1))
+    if (!map3x3(2, 0) && map3x3(1, 0) && map3x3(2, 1)) img = img.overlay(getSpecialPart(1))
+    else if (map3x3(1, 0) && map3x3(2, 1)) img = img.overlay(getStraightPart(9))
+    else if (map3x3(1, 0)) img = img.overlay(getStraightPart(11))
+    else if (map3x3(2, 1)) img = img.overlay(getStraightPart(1))
     else img = img.overlay(getStraightPart(3))
 
     //Position.BottomLeft
-    if (!map3x3(0)(2) && map3x3(1)(2) && map3x3(0)(1)) img = img.overlay(getSpecialPart(2))
-    else if (map3x3(1)(2) && map3x3(0)(1)) img = img.overlay(getStraightPart(6))
-    else if (map3x3(1)(2)) img = img.overlay(getStraightPart(4))
-    else if (map3x3(0)(1)) img = img.overlay(getStraightPart(14))
+    if (!map3x3(0, 2) && map3x3(1, 2) && map3x3(0, 1)) img = img.overlay(getSpecialPart(2))
+    else if (map3x3(1, 2) && map3x3(0, 1)) img = img.overlay(getStraightPart(6))
+    else if (map3x3(1, 2)) img = img.overlay(getStraightPart(4))
+    else if (map3x3(0, 1)) img = img.overlay(getStraightPart(14))
     else img = img.overlay(getStraightPart(12))
 
     //Position.BottomRight
-    if (!map3x3(2)(2) && map3x3(1)(2) && map3x3(2)(1)) img = img.overlay(getSpecialPart(3))
-    else if (map3x3(1)(2) && map3x3(2)(1)) img = img.overlay(getStraightPart(5))
-    else if (map3x3(1)(2)) img = img.overlay(getStraightPart(7))
-    else if (map3x3(2)(1)) img = img.overlay(getStraightPart(13))
+    if (!map3x3(2, 2) && map3x3(1, 2) && map3x3(2, 1)) img = img.overlay(getSpecialPart(3))
+    else if (map3x3(1, 2) && map3x3(2, 1)) img = img.overlay(getStraightPart(5))
+    else if (map3x3(1, 2)) img = img.overlay(getStraightPart(7))
+    else if (map3x3(2, 1)) img = img.overlay(getStraightPart(13))
     else img = img.overlay(getStraightPart(15))
 
     memoization += (map3x3 -> img)
