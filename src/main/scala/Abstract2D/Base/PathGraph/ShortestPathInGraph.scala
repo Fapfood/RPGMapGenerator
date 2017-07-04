@@ -3,6 +3,7 @@ package Abstract2D.Base.PathGraph
 import Ancillary.Point
 
 object ShortestPathInGraph {
+
   def shortestPathsOfDijkstra(graph: Graph, startPoint: Point, endPoint: Point): List[Point] = {
     val distance = collection.concurrent.TrieMap.empty[Point, Double]
     val predecessor = collection.concurrent.TrieMap.empty[Point, Point]
