@@ -1,10 +1,11 @@
-package Abstract3D
+package Generators
 
 import Abstract2D.Base._
 import Abstract2D.Map
 import Abstract2D.Objects._
+import Abstract3D.{Matrix, PieceOfMap}
 import Abstract3D.PiecesOfMap._
-import Ancillary.{ArrayGetter, Point}
+import Ancillary.{MatrixGetter, Point}
 
 class PieceOfMapGenerator(map: Map) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]
@@ -23,17 +24,17 @@ class PieceOfMapGenerator(map: Map) {
       el match {
         case path: AllPaths =>
           val id = giveId
-          for (tuple <- ArrayGetter.fromList(path.pointsList))
+          for (tuple <- MatrixGetter.fromList(path.pointsList))
             buff += PieceOfPath(id, tuple._1, tuple._2, 0)
 
         case ground: AllGround =>
           val id = giveId
-          for (tuple <- ArrayGetter.fromList(ground.pointsList))
+          for (tuple <- MatrixGetter.fromList(ground.pointsList))
             buff += PieceOfGround(id, tuple._1, tuple._2, 0)
 
         case grass: AllGrass =>
           val id = giveId
-          for (tuple <- ArrayGetter.fromList(grass.pointsList))
+          for (tuple <- MatrixGetter.fromList(grass.pointsList))
             buff += PieceOfGrass(id, tuple._1, tuple._2, 0)
 
         case _ =>
@@ -52,18 +53,18 @@ class PieceOfMapGenerator(map: Map) {
 
           val id = giveId
           for (point <- tree.pointsList) {
-            val rootMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
-            rootMatrix(point.x - x_min)(point.y - y_min) = true
+            val rootMatrix = Array.fill(y_max - y_min + 1, x_max - x_min + 1)(false)
+            rootMatrix(point.y - y_min)(point.x - x_min) = true
 
-            val branchMatrix = Array.fill(x_max - x_min + 1, y_max - y_min + 1)(false)
-            branchMatrix(point.x - x_min)(point.y - y_min - 1) = true
+            val branchMatrix = Array.fill(y_max - y_min + 1, x_max - x_min + 1)(false)
+            branchMatrix(point.y - y_min - 1)(point.x - x_min) = true
 
-            buff += PieceOfTree(id, point, rootMatrix, 1)
-            buff += PieceOfTree(id, point - Point(0, 1), branchMatrix, 2)
+            buff += PieceOfTree(id, point, Matrix(rootMatrix), 1)
+            buff += PieceOfTree(id, point - Point(0, 1), Matrix(branchMatrix), 2)
           }
 
         case signpost: Signpost =>
-          buff += PieceOfSign(giveId, signpost.pointsList.head, Array.fill(1, 1)(true), 1)
+          buff += PieceOfSign(giveId, signpost.pointsList.head, Matrix(true), 1)
 
         case building: Building =>
           val points = collection.mutable.ListBuffer.empty[Point]
@@ -74,7 +75,7 @@ class PieceOfMapGenerator(map: Map) {
               points += Point(x, y)
 
           val id = giveId
-          for (tuple <- ArrayGetter.fromList(points.toList))
+          for (tuple <- MatrixGetter.fromList(points.toList))
             buff += PieceOfWall(id, tuple._1, tuple._2, 1)
 
         case _ =>
@@ -86,18 +87,18 @@ class PieceOfMapGenerator(map: Map) {
       el match {
         case building: Building =>
           val id = giveId
-          for (tuple <- ArrayGetter.fromList(building.pointsList))
+          for (tuple <- MatrixGetter.fromList(building.pointsList))
             buff += PieceOfRoof(id, tuple._1 - Point(0, building.heightOfStorey * building.numberOfStoreys), tuple._2, 3)
 
           // door
           if (building.entryPoint.nonEmpty && building.bottomRight.y + 1 == building.entryPoint.get.y) {
             val id = giveId
-            val doorBottomMatrix = Array.fill(1, 2)(false)
-            doorBottomMatrix(0)(1) = true
-            val doorTopMatrix = Array.fill(1, 2)(false)
+            val doorBottomMatrix = Array.fill(2, 1)(false)
+            doorBottomMatrix(1)(0) = true
+            val doorTopMatrix = Array.fill(2, 1)(false)
             doorTopMatrix(0)(0) = true
-            buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 1), doorBottomMatrix, 2)
-            buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 2), doorTopMatrix, 2)
+            buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 1), Matrix(doorBottomMatrix), 2)
+            buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 2), Matrix(doorTopMatrix), 2)
           }
 
         case _ =>
