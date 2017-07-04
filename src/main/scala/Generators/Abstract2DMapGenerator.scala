@@ -1,20 +1,16 @@
-package Abstract2D
+package Generators
 
-import Abstract2D.Base._
+import Abstract2D.Map
 import Abstract2D.Objects._
 import GUI.MapParameters
-import _root_.Ancillary.{MapVisualizer, Point}
+import _root_.Ancillary.Point
 
-import scala.collection.concurrent.TrieMap
 import scala.util.Random
 
-class Abstract2DMapGenerator(val mapParams: MapParameters) {
+class Abstract2DMapGenerator(mapParams: MapParameters) {
   def generateMap: Map = {
 
     val map = new Map(mapParams.width, mapParams.height)
-
-    map.addElement(
-      new AllGrass(new Grass(map.getTopLeftCorner, map.getBottomRightCorner), new AllGround(List.empty[Ground])))
 
     for (_ <- 1 to mapParams.numberOfHouses) {
       val building = generateBuilding(map)
@@ -22,18 +18,11 @@ class Abstract2DMapGenerator(val mapParams: MapParameters) {
         map.addElement(building.get)
     }
 
-    val board = new TrieMap[Point, String]()
-    for (el <- map.getElements.filter(!_.isInstanceOf[AllGrass]).flatten(_.pointsList))
-      board.putIfAbsent(el, "D")
-
     for (_ <- 1 to mapParams.numberOfTrees) {
       val tree = generateTree(map)
       if (tree.nonEmpty)
         map.addElement(tree.get)
     }
-
-    for (el <- map.getElements.filter(!_.isInstanceOf[AllGrass]).flatten(_.pointsList))
-      board.putIfAbsent(el, "T")
 
     for (_ <- 1 to mapParams.numberOfExits) {
       val sign = generateSign(map)
@@ -41,12 +30,6 @@ class Abstract2DMapGenerator(val mapParams: MapParameters) {
         map.addElement(sign.get)
     }
 
-    for (el <- map.getElements.filter(!_.isInstanceOf[AllGrass]).flatten(_.pointsList))
-      board.putIfAbsent(el, "S")
-    println(new MapVisualizer().dump(board.toMap))
-
-
-    map.addElement(new AllPaths(map))
     map
   }
 
