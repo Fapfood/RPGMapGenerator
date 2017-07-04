@@ -1,6 +1,6 @@
 package Abstract2D
 
-import Abstract2D.Ancillary.{MapObject, RectangularObject}
+import Abstract2D.Ancillary.RectangularObject
 import _root_.Ancillary.Point
 
 class Map(val x: Int, val y: Int) {

@@ -1,6 +1,6 @@
-package Abstract2D.Ancillary
+package Abstract2D
 
-import Ancillary.Point
+import _root_.Ancillary.Point
 
 trait MapObject {
   val pointsList: List[Point]
