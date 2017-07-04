@@ -1,6 +1,6 @@
 package Abstract2D.Objects
 
-import Abstract2D.Ancillary.MapObject
+import Abstract2D.MapObject
 import Ancillary.Point
 
 class Tree(listOfRootFields: List[Point]) extends MapObject {
