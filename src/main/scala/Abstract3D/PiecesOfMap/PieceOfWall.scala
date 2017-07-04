@@ -1,7 +1,7 @@
 package Abstract3D.PiecesOfMap
 
-import Abstract3D.PieceOfMap
+import Abstract3D.{Matrix, PieceOfMap}
 import Ancillary.Point
 
-case class PieceOfWall(objectId: Int, point: Point, mapNxM: Array[Array[Boolean]], layer: Int)
+case class PieceOfWall(objectId: Int, point: Point, mapNxM: Matrix, layer: Int)
   extends PieceOfMap(objectId, point, mapNxM, layer)
