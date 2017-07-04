@@ -1,12 +1,13 @@
 package Ancillary
 
 import Abstract2D.Ancillary.RectangularObject
+import Abstract3D.Matrix
 
-object ArrayGetter {
+object MatrixGetter {
 
-  def fromArray(array: Array[Array[Boolean]]): List[(Point, Array[Array[Boolean]])] = {
+  def fromArray(array: Array[Array[Boolean]]): List[(Point, Matrix)] = {
 
-    val buff = collection.mutable.ListBuffer.empty[(Point, Array[Array[Boolean]])]
+    val buff = collection.mutable.ListBuffer.empty[(Point, Matrix)]
     val x_length = array.length
     val y_length = array(0).length
 
@@ -16,16 +17,16 @@ object ArrayGetter {
       matrix(1)(1) = true
       for (p <- Perimeter.getPerimeter(List(point))) {
         if (p.x >= 0 && p.x <= x_length - 1 && p.y >= 0 && p.y <= y_length - 1)
-          matrix(1 + (p - point).x)(1 + (p - point).y) = array(p.x)(p.y)
+          matrix(1 + (p - point).y)(1 + (p - point).x) = array(p.y)(p.x)
       }
-      buff += Tuple2(point, matrix)
+      buff += Tuple2(point, Matrix(matrix))
     }
 
     buff.toList
   }
 
-  def fromList(points: List[Point]): List[(Point, Array[Array[Boolean]])] = {
-    val buff = collection.mutable.ListBuffer.empty[(Point, Array[Array[Boolean]])]
+  def fromList(points: List[Point]): List[(Point, Matrix)] = {
+    val buff = collection.mutable.ListBuffer.empty[(Point, Matrix)]
 
     for (point <- points) {
       val matrix = Array.fill(3, 3)(false)
@@ -33,8 +34,8 @@ object ArrayGetter {
 
       for (p <- Perimeter.getPerimeter(List(point)))
         if (points.contains(p))
-          matrix(1 - (point - p).x)(1 - (point - p).y) = true
-      buff += Tuple2(point, matrix)
+          matrix(1 - (point - p).y)(1 - (point - p).x) = true
+      buff += Tuple2(point, Matrix(matrix))
     }
     buff.toList
   }
