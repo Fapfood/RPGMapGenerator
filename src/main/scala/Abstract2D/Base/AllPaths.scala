@@ -1,8 +1,8 @@
 package Abstract2D.Base
 
-import Abstract2D.Ancillary.{BetweenPointsObject, MapObject}
-import Abstract2D.Map
-import Abstract2D.PathGraph.{Graph, GraphBuilder, ShortestPathInGraph}
+import Abstract2D.Ancillary.BetweenPointsObject
+import Abstract2D.Base.PathGraph.{Graph, GraphBuilder, ShortestPathInGraph}
+import Abstract2D.{Map, MapObject}
 import Ancillary.Point
 
 class AllPaths(map: Map) extends MapObject {
@@ -31,7 +31,6 @@ class AllPaths(map: Map) extends MapObject {
             for (i <- 0 to pathPoints.length - 2)
               buff ++= BetweenPointsObject.planIdealPath(pathPoints(i), pathPoints(i + 1))
             //            buff ++= result
-            println(buff)
             //            graph.addVerticesAndEdges(result.toSet, GraphBuilder.createEdgesBetween(vertices ++ result, obstacles))
           }
         }

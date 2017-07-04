@@ -1,6 +1,7 @@
 package Abstract2D.Base
 
-import Abstract2D.Ancillary.{FlatObject, MapObject}
+import Abstract2D.Ancillary.FlatObject
+import Abstract2D.MapObject
 import Ancillary.Point
 
 class Ground(midpoint: Point, area: Int) extends MapObject {

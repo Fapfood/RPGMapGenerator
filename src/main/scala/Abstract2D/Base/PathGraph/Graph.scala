@@ -1,4 +1,4 @@
-package Abstract2D.PathGraph
+package Abstract2D.Base.PathGraph
 
 import Ancillary.Point
 

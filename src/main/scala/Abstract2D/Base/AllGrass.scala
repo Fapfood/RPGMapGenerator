@@ -1,6 +1,6 @@
 package Abstract2D.Base
 
-import Abstract2D.Ancillary.MapObject
+import Abstract2D.MapObject
 import Ancillary.Point
 
 class AllGrass(grass: Grass, allGround: AllGround) extends MapObject {

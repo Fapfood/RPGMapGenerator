@@ -1,6 +1,6 @@
 package Abstract2D.Base
 
-import Abstract2D.Ancillary.MapObject
+import Abstract2D.MapObject
 import Ancillary.Point
 
 class Path(startPoint: Point, endPoint: Point, workArea: List[Point], obstacles: List[Point]) extends MapObject {
