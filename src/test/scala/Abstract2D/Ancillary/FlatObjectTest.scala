@@ -1,6 +1,6 @@
 package Abstract2D.Ancillary
 
-import Ancillary.Point
+import Ancillary.{FlatObject, Point}
 import org.scalatest.FunSuite
 
 class FlatObjectTest extends FunSuite {

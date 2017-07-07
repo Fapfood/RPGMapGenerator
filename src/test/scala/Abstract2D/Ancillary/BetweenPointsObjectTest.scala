@@ -1,8 +1,7 @@
 package Abstract2D.Ancillary
 
-import Ancillary.Point
+import Ancillary.{BetweenPointsObject, Point}
 import org.scalatest.FunSuite
-
 
 class BetweenPointsObjectTest extends FunSuite {
   test("Start and finish are correct") {

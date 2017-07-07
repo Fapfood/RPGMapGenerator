@@ -1,6 +1,6 @@
 package Abstract2D.Ancillary
 
-import Ancillary.Point
+import Ancillary.{Point, RectangularObject}
 import org.scalatest.FunSuite
 
 class RectangularObjectTest extends FunSuite {
