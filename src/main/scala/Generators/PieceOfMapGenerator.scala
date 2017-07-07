@@ -1,11 +1,11 @@
 package Generators
 
-import Abstract2D.Base._
 import Abstract2D.Map
 import Abstract2D.Objects._
-import Abstract3D.{Matrix, PieceOfMap}
 import Abstract3D.PiecesOfMap._
+import Abstract3D.{Matrix, PieceOfMap}
 import Ancillary.{MatrixGetter, Point}
+import Base.{AllGrass, AllGround, AllPaths}
 
 class PieceOfMapGenerator(map: Map) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]

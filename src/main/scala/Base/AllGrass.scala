@@ -1,4 +1,4 @@
-package Abstract2D.Base
+package Base
 
 import Abstract2D.MapObject
 import Ancillary.Point

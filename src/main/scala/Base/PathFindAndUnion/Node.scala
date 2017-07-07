@@ -1,4 +1,4 @@
-package Abstract2D.Base.PathFindAndUnion
+package Base.PathFindAndUnion
 
 import Ancillary.Point
 

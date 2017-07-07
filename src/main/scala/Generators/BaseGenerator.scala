@@ -1,7 +1,7 @@
 package Generators
 
-import Abstract2D.Base._
 import Abstract2D.Map
+import Base._
 
 class BaseGenerator(map: Map) {
 
