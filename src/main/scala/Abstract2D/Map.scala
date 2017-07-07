@@ -5,15 +5,15 @@ import _root_.Ancillary.Point
 
 class Map(val x: Int, val y: Int) {
   private val elems = collection.mutable.ListBuffer.empty[MapObject]
-  val pointsList: List[Point] = RectangularObject.buildBase(Point(), Point(x - 1, y - 1))
+  val pointsList: List[Point] = RectangularObject.buildBase(getTopLeftCorner, getBottomRightCorner)
 
   def addElement(elem: MapObject): Unit = elems += elem
 
   def getElements: List[MapObject] = elems.toList
 
-  def getTopLeftCorner: Point = Point(0, 0)
+  def getTopLeftCorner: Point = Point()
 
-  def getBottomRightCorner: Point = Point(x, y)
+  def getBottomRightCorner: Point = Point(x - 1, y - 1)
 
   def belongsToMap(point: Point): Boolean = pointsList.contains(point)
 
