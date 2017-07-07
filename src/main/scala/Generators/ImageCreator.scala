@@ -3,14 +3,14 @@ package Generators
 import java.io.File
 
 import Ancillary.Point
-import Randomization.Tile
+import Randomization.DTO_Tile
 import com.sksamuel.scrimage.{Image, Position}
 
 class ImageCreator(x: Int, y: Int) {
   private val TILE_SIDE = 32
   private var image: Image = makeImage(x, y)
 
-  def addTiles(tuples: List[Tile]): Image = {
+  def addTiles(tuples: List[DTO_Tile]): Image = {
     val buff = tuples.to[collection.mutable.ListBuffer]
     while (buff.nonEmpty) {
       val priority = buff.map(v => v.layer).min

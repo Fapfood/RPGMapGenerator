@@ -1,13 +1,13 @@
 package Generators
 
-import Abstract2D.Map
+import Abstract2D.DTO_Map
 import Abstract2D.Objects._
 import Abstract3D.PiecesOfMap._
 import Abstract3D.{Matrix, PieceOfMap}
 import Ancillary.{MatrixGetter, Point}
 import Base._
 
-class PieceOfMapGenerator(map: Map, base: Base) {
+class PieceOfMapGenerator(map: DTO_Map, base: Base) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]
   private var id = 0
 

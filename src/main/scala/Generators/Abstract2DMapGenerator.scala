@@ -1,16 +1,16 @@
 package Generators
 
-import Abstract2D.Map
+import Abstract2D.DTO_Map
 import Abstract2D.Objects._
-import GUI.MapParameters
+import GUI.DTO_MapParameters
 import _root_.Ancillary.Point
 
 import scala.util.Random
 
-class Abstract2DMapGenerator(mapParams: MapParameters) {
-  def generateMap: Map = {
+class Abstract2DMapGenerator(mapParams: DTO_MapParameters) {
+  def generateMap: DTO_Map = {
 
-    val map = new Map(mapParams.width, mapParams.height)
+    val map = new DTO_Map(mapParams.width, mapParams.height)
 
     for (_ <- 1 to mapParams.numberOfHouses) {
       val building = generateBuilding(map)
@@ -33,7 +33,7 @@ class Abstract2DMapGenerator(mapParams: MapParameters) {
     map
   }
 
-  private def generateBuilding(map: Map): Option[Building] = {
+  private def generateBuilding(map: DTO_Map): Option[Building] = {
     var tried = 0
     var building: Building = new Building(Point(), Point(), List(), 0)
     do {
@@ -48,7 +48,7 @@ class Abstract2DMapGenerator(mapParams: MapParameters) {
     if (tried < 20) Option(building) else None
   }
 
-  private def generateTree(map: Map): Option[Tree] = {
+  private def generateTree(map: DTO_Map): Option[Tree] = {
     var tried = 0
     var tree: Tree = new Tree(List())
     do {
@@ -63,7 +63,7 @@ class Abstract2DMapGenerator(mapParams: MapParameters) {
     if (tried < 20) Option(tree) else None
   }
 
-  private def generateSign(map: Map): Option[Signpost] = {
+  private def generateSign(map: DTO_Map): Option[Signpost] = {
     var tried = 0
     var sign: Signpost = new Signpost(Point(), Point())
     do {
