@@ -1,7 +1,5 @@
 package Base
 
-import Abstract2D.Base.PathFindAndUnion.MinimumSpanningTree
-import Abstract2D.Base.PathGraph.{Graph, GraphBuilder}
 import Abstract2D.{Map, MapObject}
 import Ancillary.Point
 import Base.PathFindAndUnion.MinimumSpanningTree

@@ -1,7 +1,6 @@
 package Base.PathFindAndUnion
 
 import Abstract2D.Ancillary.BetweenPointsObject
-import Abstract2D.Base.PathGraph.{Graph, ShortestPathInGraph}
 import Ancillary.Point
 import Base.PathGraph.{Graph, ShortestPathInGraph}
 
