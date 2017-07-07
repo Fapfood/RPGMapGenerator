@@ -9,9 +9,9 @@ object MapGenerator {
     println(">> generating 2D map")
     val map = new Abstract2DMapGenerator(mapParams).generateMap
     println(">> generating base for the map")
-    val baseMap = new BaseGenerator(map).generateMap
+    val baseMap = new BaseGenerator(map).generateBase
     println(">> generating arrays of elements")
-    val piecesOfMap = new PieceOfMapGenerator(baseMap).generateMap
+    val piecesOfMap = new PieceOfMapGenerator(map, baseMap).generateMap
     println(">> generating tiles")
     val piecesOfTile = new TileGenerator(piecesOfMap).generateMap
     println(">> generating image")

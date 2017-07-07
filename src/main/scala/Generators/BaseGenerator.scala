@@ -1,19 +1,16 @@
 package Generators
 
 import Abstract2D.Map
-import Base._
+import Base.{AllPaths, Base, BaseType}
 
 class BaseGenerator(map: Map) {
 
-  def generateMap: Map = {
+  def generateBase: Base = {
+    val base = new Base(map.x, map.y)
 
-    map.addElement(
-      new AllGrass(new Grass(map.getTopLeftCorner, map.getBottomRightCorner), new AllGround(List.empty[Ground])))
+    for (point <- new AllPaths(map).pointsList)
+      base.add(point, BaseType.Path)
 
-    map.addElement(new AllPaths(map))
-
-    map
-
+    base
   }
-
 }

@@ -5,40 +5,34 @@ import Abstract2D.Objects._
 import Abstract3D.PiecesOfMap._
 import Abstract3D.{Matrix, PieceOfMap}
 import Ancillary.{MatrixGetter, Point}
-import Base.{AllGrass, AllGround, AllPaths}
+import Base._
 
-class PieceOfMapGenerator(map: Map) {
+class PieceOfMapGenerator(map: Map, base: Base) {
   private val buff = collection.mutable.ListBuffer.empty[PieceOfMap]
   private var id = 0
 
   def generateMap: List[PieceOfMap] = {
-    generateLayer0()
+    generateBase()
     generateLayer1()
     generateLayer2()
-    generateLayer3()
     buff.toList
   }
 
-  private def generateLayer0(): Unit = {
-    for (el <- map.getElements)
-      el match {
-        case path: AllPaths =>
-          val id = giveId
-          for (tuple <- MatrixGetter.fromList(path.pointsList))
-            buff += PieceOfPath(id, tuple._1, tuple._2, 0)
+  private def generateBase(): Unit = {
+    val path_id = giveId
+    val path_points = base.getElements.filter(e => e._2 == BaseType.Path).map(e => e._1)
+    for (tuple <- MatrixGetter.fromList(path_points))
+      buff += PieceOfPath(path_id, tuple._1, tuple._2, 0)
 
-        case ground: AllGround =>
-          val id = giveId
-          for (tuple <- MatrixGetter.fromList(ground.pointsList))
-            buff += PieceOfGround(id, tuple._1, tuple._2, 0)
+    val ground_id = giveId
+    val ground_points = base.getElements.filter(e => e._2 == BaseType.Ground).map(e => e._1)
+    for (tuple <- MatrixGetter.fromList(ground_points))
+      buff += PieceOfGround(ground_id, tuple._1, tuple._2, 0)
 
-        case grass: AllGrass =>
-          val id = giveId
-          for (tuple <- MatrixGetter.fromList(grass.pointsList))
-            buff += PieceOfGrass(id, tuple._1, tuple._2, 0)
-
-        case _ =>
-      }
+    val grass_id = giveId
+    val grass_points = base.getElements.filter(e => e._2 == BaseType.Grass).map(e => e._1)
+    for (tuple <- MatrixGetter.fromList(grass_points))
+      buff += PieceOfGrass(grass_id, tuple._1, tuple._2, 0)
   }
 
   private def generateLayer1(): Unit = {
@@ -101,13 +95,6 @@ class PieceOfMapGenerator(map: Map) {
             buff += PieceOfDoor(id, building.entryPoint.get - Point(0, 2), Matrix(doorTopMatrix), 2)
           }
 
-        case _ =>
-      }
-  }
-
-  private def generateLayer3(): Unit = {
-    for (el <- map.getElements)
-      el match {
         case _ =>
       }
   }
