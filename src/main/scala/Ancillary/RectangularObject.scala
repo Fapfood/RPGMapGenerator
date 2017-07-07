@@ -1,6 +1,4 @@
-package Abstract2D.Ancillary
-
-import Ancillary.Point
+package Ancillary
 
 object RectangularObject {
   def buildBase(leftTop: Point, rightBottom: Point): List[Point] = {

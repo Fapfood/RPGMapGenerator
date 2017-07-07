@@ -1,6 +1,4 @@
-package Abstract2D.Ancillary
-
-import Ancillary.{Perimeter, Point}
+package Ancillary
 
 import scala.util.Random
 

@@ -1,6 +1,5 @@
 package Ancillary
 
-import Abstract2D.Ancillary.RectangularObject
 import Abstract3D.Matrix
 
 object MatrixGetter {
