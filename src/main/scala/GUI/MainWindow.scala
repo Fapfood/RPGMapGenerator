@@ -23,8 +23,6 @@ object MainWindow extends SimpleSwingApplication {
       }
     }
 
-    import BorderPanel.Position._
-
     contents = getTextFieldsPanel
     // size = new Dimension(500,500)
     centerOnScreen()
@@ -59,5 +57,4 @@ object MainWindow extends SimpleSwingApplication {
     tField.text = "0"
     tField
   }
-
 }

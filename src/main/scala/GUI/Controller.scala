@@ -31,7 +31,7 @@ object Controller {
 
   def generate(): Unit = {
     println("Generating image")
-    val params = new MapParameters(width, height, treesNumber, housesNumber, exitsNumber)
+    val params = new DTO_MapParameters(width, height, treesNumber, housesNumber, exitsNumber)
 
     val image: Image = MapGenerator.createMapWithParameters(params)
     val tmpFileName = "tmp" + tmpCounter.toString + ".png"
@@ -75,5 +75,4 @@ object Controller {
   def exitsNumber: Int = {
     MainWindow.ExitsTextField.text.toInt
   }
-
 }
