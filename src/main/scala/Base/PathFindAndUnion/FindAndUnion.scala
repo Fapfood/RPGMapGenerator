@@ -26,5 +26,4 @@ class FindAndUnion {
         node2.rank = node2.rank + 1
     }
   }
-
 }

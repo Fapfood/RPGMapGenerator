@@ -1,11 +1,11 @@
 package Base
 
-import Abstract2D.{Map, MapObject}
+import Abstract2D.{DTO_Map, MapObject}
 import Ancillary.Point
 import Base.PathFindAndUnion.MinimumSpanningTree
 import Base.PathGraph.{Graph, GraphBuilder}
 
-class AllPaths(map: Map) extends MapObject {
+class AllPaths(map: DTO_Map) extends MapObject {
   private val buff = collection.mutable.ListBuffer.empty[Point]
   override val pointsList: List[Point] = concatenatePaths()
   override val hardness: Int = 0

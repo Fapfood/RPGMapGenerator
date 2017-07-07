@@ -1,7 +1,6 @@
 package Base.PathFindAndUnion
 
-import Abstract2D.Ancillary.BetweenPointsObject
-import Ancillary.Point
+import Ancillary.{BetweenPointsObject, Point}
 import Base.PathGraph.{Graph, ShortestPathInGraph}
 
 class MinimumSpanningTree {

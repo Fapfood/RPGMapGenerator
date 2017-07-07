@@ -1,7 +1,6 @@
 package Base.PathGraph
 
-import Abstract2D.Ancillary.BetweenPointsObject
-import Ancillary.{GroupOfArea, Perimeter, Point}
+import Ancillary.{BetweenPointsObject, GroupOfArea, Perimeter, Point}
 
 object GraphBuilder {
   def createVerticesAround(obstacles: List[Point], workArea: List[Point]): Set[Point] = {

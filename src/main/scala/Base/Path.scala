@@ -16,13 +16,13 @@ class Path(startPoint: Point, endPoint: Point, workArea: List[Point], obstacles:
     if (startPoint == endPoint)
       return List(startPoint)
 
-//    val graph = GraphBuilder.createGraphBetween(startPoint, endPoint, obstacles, workArea)
-//    val path = ShortestPathInGraph.shortestPathsOfDijkstra(graph, startPoint, endPoint)
+    //    val graph = GraphBuilder.createGraphBetween(startPoint, endPoint, obstacles, workArea)
+    //    val path = ShortestPathInGraph.shortestPathsOfDijkstra(graph, startPoint, endPoint)
 
     val result = collection.mutable.ListBuffer.empty[Point]
-//    for (i <- 0 to path.length - 2)
-//      result ++= new BetweenPointsObject {}.planIdealPath(path(i), path(i + 1))
-//    println(result.toList)
+    //    for (i <- 0 to path.length - 2)
+    //      result ++= new BetweenPointsObject {}.planIdealPath(path(i), path(i + 1))
+    //    println(result.toList)
     result.toList
   }
 }
