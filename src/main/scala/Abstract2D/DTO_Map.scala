@@ -1,9 +1,8 @@
 package Abstract2D
 
-import Abstract2D.Ancillary.RectangularObject
-import _root_.Ancillary.Point
+import _root_.Ancillary.{Point, RectangularObject}
 
-class Map(val x: Int, val y: Int) {
+class DTO_Map(val x: Int, val y: Int) {
   private val elems = collection.mutable.ListBuffer.empty[MapObject]
   val pointsList: List[Point] = RectangularObject.buildBase(getTopLeftCorner, getBottomRightCorner)
 
