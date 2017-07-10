@@ -19,6 +19,10 @@ class Matrix private(private val array: Array[Array[Boolean]]) {
   def indices_y: Range = array.indices
 
   def length: Int = array.flatten.length
+
+  def length_x: Int = array(0).length
+
+  def length_y: Int = array.length
 }
 
 object Matrix {
